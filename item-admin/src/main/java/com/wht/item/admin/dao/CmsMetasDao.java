@@ -11,5 +11,9 @@ import java.util.List;
  * @since 2020-05-30 21:56
  */
 public interface CmsMetasDao {
-    int insertList(@Param("list") List<CmsMeta> list);
+    void insertList(@Param("list") List<CmsMeta> list);
+
+    List<CmsMeta> selectByArticle(@Param("articleId") Long articleId, @Param("type") String type);
+
+    CmsMeta selectByName(String name);
 }

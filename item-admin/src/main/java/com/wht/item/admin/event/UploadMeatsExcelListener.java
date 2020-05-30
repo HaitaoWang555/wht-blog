@@ -47,8 +47,8 @@ public class UploadMeatsExcelListener extends AnalysisEventListener<CmsMetasPara
      * 加上存储数据库
      */
     private void saveData() {
-        metasService.insertList(list);
         LOGGER.info("{}条数据，开始存储数据库！", list.size());
+        metasService.insertList(list);
         LOGGER.info("存储数据库成功！");
     }
 }

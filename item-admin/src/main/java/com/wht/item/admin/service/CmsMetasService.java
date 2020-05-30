@@ -47,7 +47,11 @@ public interface CmsMetasService {
 
     /**
      * 批量创建
-     * @param list
      */
-    int insertList(List<CmsMetasParam> list);
+    void insertList(List<CmsMetasParam> list);
+
+    /**
+     * 文章关联标签
+     */
+    void saveOrRemoveMeta(String meta, String type, Long articleId);
 }

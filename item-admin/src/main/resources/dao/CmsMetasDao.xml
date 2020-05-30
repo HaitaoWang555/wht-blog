@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wht.item.admin.dao.CmsMetasDao">
+    <resultMap id="BaseResultMap" type="com.wht.item.model.CmsMeta" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+    </resultMap>
     <!--批量新增 分类与标签-->
     <insert id="insertList">
         INSERT INTO cms_meta (NAME, TYPE) VALUES
         <foreach collection="list" separator="," item="item" index="index">
-            (#{item.name,jdbcType=BIGINT},
-            #{item.type,jdbcType=BIGINT})
+            (#{item.name,jdbcType=VARCHAR},
+            #{item.type,jdbcType=VARCHAR})
         </foreach>
     </insert>
+    <select id="selectByArticle" resultMap="BaseResultMap">
+        select *
+        from cms_meta
+        where type = #{type} and id in (select m_id from cms_middle where a_id = #{articleId})
+    </select>
+    <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select *
+        from cms_meta
+        where name = #{name,jdbcType=VARCHAR}
+    </select>
 </mapper>
