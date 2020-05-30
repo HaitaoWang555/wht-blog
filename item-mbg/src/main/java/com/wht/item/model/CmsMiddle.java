@@ -4,37 +4,37 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class CmsMiddle implements Serializable {
-    private Integer id;
+    private Long id;
 
     @ApiModelProperty(value = "文章ID")
-    private Integer aId;
+    private Long aId;
 
     @ApiModelProperty(value = "分类/标签ID")
-    private Integer mId;
+    private Long mId;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getaId() {
+    public Long getaId() {
         return aId;
     }
 
-    public void setaId(Integer aId) {
+    public void setaId(Long aId) {
         this.aId = aId;
     }
 
-    public Integer getmId() {
+    public Long getmId() {
         return mId;
     }
 
-    public void setmId(Integer mId) {
+    public void setmId(Long mId) {
         this.mId = mId;
     }
 

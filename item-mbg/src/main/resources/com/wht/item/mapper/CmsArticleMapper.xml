@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wht.item.mapper.CmsArticleMapper">
   <resultMap id="BaseResultMap" type="com.wht.item.model.CmsArticle">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" jdbcType="BIGINT" property="id" />
     <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="author_id" jdbcType="INTEGER" property="authorId" />
+    <result column="author_id" jdbcType="BIGINT" property="authorId" />
     <result column="hits" jdbcType="INTEGER" property="hits" />
     <result column="tags" jdbcType="VARCHAR" property="tags" />
     <result column="category" jdbcType="VARCHAR" property="category" />
@@ -110,17 +110,17 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
     from cms_article
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from cms_article
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.wht.item.model.CmsArticleExample">
     delete from cms_article
@@ -129,20 +129,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.wht.item.model.CmsArticle">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into cms_article (title, author_id, hits, 
       tags, category, status, 
       editor_type, created_time, updated_time, 
       content)
-    values (#{title,jdbcType=VARCHAR}, #{authorId,jdbcType=INTEGER}, #{hits,jdbcType=INTEGER}, 
+    values (#{title,jdbcType=VARCHAR}, #{authorId,jdbcType=BIGINT}, #{hits,jdbcType=INTEGER}, 
       #{tags,jdbcType=VARCHAR}, #{category,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{editorType,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
       #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wht.item.model.CmsArticle">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into cms_article
@@ -183,7 +183,7 @@
         #{title,jdbcType=VARCHAR},
       </if>
       <if test="authorId != null">
-        #{authorId,jdbcType=INTEGER},
+        #{authorId,jdbcType=BIGINT},
       </if>
       <if test="hits != null">
         #{hits,jdbcType=INTEGER},
@@ -221,13 +221,13 @@
     update cms_article
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
       </if>
       <if test="record.authorId != null">
-        author_id = #{record.authorId,jdbcType=INTEGER},
+        author_id = #{record.authorId,jdbcType=BIGINT},
       </if>
       <if test="record.hits != null">
         hits = #{record.hits,jdbcType=INTEGER},
@@ -260,9 +260,9 @@
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update cms_article
-    set id = #{record.id,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=BIGINT},
       title = #{record.title,jdbcType=VARCHAR},
-      author_id = #{record.authorId,jdbcType=INTEGER},
+      author_id = #{record.authorId,jdbcType=BIGINT},
       hits = #{record.hits,jdbcType=INTEGER},
       tags = #{record.tags,jdbcType=VARCHAR},
       category = #{record.category,jdbcType=VARCHAR},
@@ -277,9 +277,9 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update cms_article
-    set id = #{record.id,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=BIGINT},
       title = #{record.title,jdbcType=VARCHAR},
-      author_id = #{record.authorId,jdbcType=INTEGER},
+      author_id = #{record.authorId,jdbcType=BIGINT},
       hits = #{record.hits,jdbcType=INTEGER},
       tags = #{record.tags,jdbcType=VARCHAR},
       category = #{record.category,jdbcType=VARCHAR},
@@ -298,7 +298,7 @@
         title = #{title,jdbcType=VARCHAR},
       </if>
       <if test="authorId != null">
-        author_id = #{authorId,jdbcType=INTEGER},
+        author_id = #{authorId,jdbcType=BIGINT},
       </if>
       <if test="hits != null">
         hits = #{hits,jdbcType=INTEGER},
@@ -325,12 +325,12 @@
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wht.item.model.CmsArticle">
     update cms_article
     set title = #{title,jdbcType=VARCHAR},
-      author_id = #{authorId,jdbcType=INTEGER},
+      author_id = #{authorId,jdbcType=BIGINT},
       hits = #{hits,jdbcType=INTEGER},
       tags = #{tags,jdbcType=VARCHAR},
       category = #{category,jdbcType=VARCHAR},
@@ -339,12 +339,12 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wht.item.model.CmsArticle">
     update cms_article
     set title = #{title,jdbcType=VARCHAR},
-      author_id = #{authorId,jdbcType=INTEGER},
+      author_id = #{authorId,jdbcType=BIGINT},
       hits = #{hits,jdbcType=INTEGER},
       tags = #{tags,jdbcType=VARCHAR},
       category = #{category,jdbcType=VARCHAR},
@@ -352,6 +352,6 @@
       editor_type = #{editorType,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

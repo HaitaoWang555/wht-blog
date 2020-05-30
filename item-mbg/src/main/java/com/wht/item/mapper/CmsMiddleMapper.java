@@ -10,7 +10,7 @@ public interface CmsMiddleMapper {
 
     int deleteByExample(CmsMiddleExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(CmsMiddle record);
 
@@ -18,7 +18,7 @@ public interface CmsMiddleMapper {
 
     List<CmsMiddle> selectByExample(CmsMiddleExample example);
 
-    CmsMiddle selectByPrimaryKey(Integer id);
+    CmsMiddle selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") CmsMiddle record, @Param("example") CmsMiddleExample example);
 

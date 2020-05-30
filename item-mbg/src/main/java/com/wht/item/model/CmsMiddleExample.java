@@ -114,52 +114,52 @@ public class CmsMiddleExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Integer value) {
+        public Criteria andIdEqualTo(Long value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Integer value) {
+        public Criteria andIdNotEqualTo(Long value) {
             addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Integer value) {
+        public Criteria andIdGreaterThan(Long value) {
             addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andIdGreaterThanOrEqualTo(Long value) {
             addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Integer value) {
+        public Criteria andIdLessThan(Long value) {
             addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Integer value) {
+        public Criteria andIdLessThanOrEqualTo(Long value) {
             addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Integer> values) {
+        public Criteria andIdIn(List<Long> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Integer> values) {
+        public Criteria andIdNotIn(List<Long> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Integer value1, Integer value2) {
+        public Criteria andIdBetween(Long value1, Long value2) {
             addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andIdNotBetween(Long value1, Long value2) {
             addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
@@ -174,52 +174,52 @@ public class CmsMiddleExample {
             return (Criteria) this;
         }
 
-        public Criteria andAIdEqualTo(Integer value) {
+        public Criteria andAIdEqualTo(Long value) {
             addCriterion("a_id =", value, "aId");
             return (Criteria) this;
         }
 
-        public Criteria andAIdNotEqualTo(Integer value) {
+        public Criteria andAIdNotEqualTo(Long value) {
             addCriterion("a_id <>", value, "aId");
             return (Criteria) this;
         }
 
-        public Criteria andAIdGreaterThan(Integer value) {
+        public Criteria andAIdGreaterThan(Long value) {
             addCriterion("a_id >", value, "aId");
             return (Criteria) this;
         }
 
-        public Criteria andAIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andAIdGreaterThanOrEqualTo(Long value) {
             addCriterion("a_id >=", value, "aId");
             return (Criteria) this;
         }
 
-        public Criteria andAIdLessThan(Integer value) {
+        public Criteria andAIdLessThan(Long value) {
             addCriterion("a_id <", value, "aId");
             return (Criteria) this;
         }
 
-        public Criteria andAIdLessThanOrEqualTo(Integer value) {
+        public Criteria andAIdLessThanOrEqualTo(Long value) {
             addCriterion("a_id <=", value, "aId");
             return (Criteria) this;
         }
 
-        public Criteria andAIdIn(List<Integer> values) {
+        public Criteria andAIdIn(List<Long> values) {
             addCriterion("a_id in", values, "aId");
             return (Criteria) this;
         }
 
-        public Criteria andAIdNotIn(List<Integer> values) {
+        public Criteria andAIdNotIn(List<Long> values) {
             addCriterion("a_id not in", values, "aId");
             return (Criteria) this;
         }
 
-        public Criteria andAIdBetween(Integer value1, Integer value2) {
+        public Criteria andAIdBetween(Long value1, Long value2) {
             addCriterion("a_id between", value1, value2, "aId");
             return (Criteria) this;
         }
 
-        public Criteria andAIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andAIdNotBetween(Long value1, Long value2) {
             addCriterion("a_id not between", value1, value2, "aId");
             return (Criteria) this;
         }
@@ -234,52 +234,52 @@ public class CmsMiddleExample {
             return (Criteria) this;
         }
 
-        public Criteria andMIdEqualTo(Integer value) {
+        public Criteria andMIdEqualTo(Long value) {
             addCriterion("m_id =", value, "mId");
             return (Criteria) this;
         }
 
-        public Criteria andMIdNotEqualTo(Integer value) {
+        public Criteria andMIdNotEqualTo(Long value) {
             addCriterion("m_id <>", value, "mId");
             return (Criteria) this;
         }
 
-        public Criteria andMIdGreaterThan(Integer value) {
+        public Criteria andMIdGreaterThan(Long value) {
             addCriterion("m_id >", value, "mId");
             return (Criteria) this;
         }
 
-        public Criteria andMIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andMIdGreaterThanOrEqualTo(Long value) {
             addCriterion("m_id >=", value, "mId");
             return (Criteria) this;
         }
 
-        public Criteria andMIdLessThan(Integer value) {
+        public Criteria andMIdLessThan(Long value) {
             addCriterion("m_id <", value, "mId");
             return (Criteria) this;
         }
 
-        public Criteria andMIdLessThanOrEqualTo(Integer value) {
+        public Criteria andMIdLessThanOrEqualTo(Long value) {
             addCriterion("m_id <=", value, "mId");
             return (Criteria) this;
         }
 
-        public Criteria andMIdIn(List<Integer> values) {
+        public Criteria andMIdIn(List<Long> values) {
             addCriterion("m_id in", values, "mId");
             return (Criteria) this;
         }
 
-        public Criteria andMIdNotIn(List<Integer> values) {
+        public Criteria andMIdNotIn(List<Long> values) {
             addCriterion("m_id not in", values, "mId");
             return (Criteria) this;
         }
 
-        public Criteria andMIdBetween(Integer value1, Integer value2) {
+        public Criteria andMIdBetween(Long value1, Long value2) {
             addCriterion("m_id between", value1, value2, "mId");
             return (Criteria) this;
         }
 
-        public Criteria andMIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andMIdNotBetween(Long value1, Long value2) {
             addCriterion("m_id not between", value1, value2, "mId");
             return (Criteria) this;
         }

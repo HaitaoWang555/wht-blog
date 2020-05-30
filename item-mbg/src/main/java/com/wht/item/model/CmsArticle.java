@@ -6,13 +6,13 @@ import java.util.Date;
 
 public class CmsArticle implements Serializable {
     @ApiModelProperty(value = "文章ID")
-    private Integer id;
+    private Long id;
 
     @ApiModelProperty(value = "文章标题")
     private String title;
 
     @ApiModelProperty(value = "文章作者ID")
-    private Integer authorId;
+    private Long authorId;
 
     @ApiModelProperty(value = "文章点击量")
     private Integer hits;
@@ -40,11 +40,11 @@ public class CmsArticle implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -56,11 +56,11 @@ public class CmsArticle implements Serializable {
         this.title = title;
     }
 
-    public Integer getAuthorId() {
+    public Long getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(Integer authorId) {
+    public void setAuthorId(Long authorId) {
         this.authorId = authorId;
     }
 

@@ -10,7 +10,7 @@ public interface CmsArticleMapper {
 
     int deleteByExample(CmsArticleExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(CmsArticle record);
 
@@ -20,7 +20,7 @@ public interface CmsArticleMapper {
 
     List<CmsArticle> selectByExample(CmsArticleExample example);
 
-    CmsArticle selectByPrimaryKey(Integer id);
+    CmsArticle selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") CmsArticle record, @Param("example") CmsArticleExample example);
 

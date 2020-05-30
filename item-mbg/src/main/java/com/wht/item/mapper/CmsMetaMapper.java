@@ -10,7 +10,7 @@ public interface CmsMetaMapper {
 
     int deleteByExample(CmsMetaExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(CmsMeta record);
 
@@ -18,7 +18,7 @@ public interface CmsMetaMapper {
 
     List<CmsMeta> selectByExample(CmsMetaExample example);
 
-    CmsMeta selectByPrimaryKey(Integer id);
+    CmsMeta selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") CmsMeta record, @Param("example") CmsMetaExample example);
 

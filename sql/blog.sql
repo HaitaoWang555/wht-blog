@@ -20,10 +20,10 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_article`;
 CREATE TABLE `cms_article` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '文章ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '文章ID',
   `title` varchar(255) NOT NULL COMMENT '文章标题',
   `content` mediumtext COMMENT '文章内容',
-  `author_id` int(11) DEFAULT NULL COMMENT '文章作者ID',
+  `author_id` bigint(20) DEFAULT NULL COMMENT '文章作者ID',
   `hits` int(11) DEFAULT '0' COMMENT '文章点击量',
   `tags` varchar(255) DEFAULT NULL COMMENT '文章标签',
   `category` varchar(255) DEFAULT NULL COMMENT '文章分类',
@@ -43,10 +43,10 @@ CREATE TABLE `cms_article` (
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_meta`;
 CREATE TABLE `cms_meta` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '分类/标签ID',
-  `name` varchar(255) NOT NULL COMMENT '分类/标签ID',
-  `type` varchar(45) NOT NULL COMMENT '分类/标签ID',
-  `created_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '分类/标签ID',
+  `name` varchar(255) NOT NULL COMMENT '名称',
+  `type` varchar(45) NOT NULL COMMENT '类型 分类/标签',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -60,9 +60,9 @@ CREATE TABLE `cms_meta` (
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_middle`;
 CREATE TABLE `cms_middle` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `a_id` int(11) NOT NULL COMMENT '文章ID',
-  `m_id` int(11) NOT NULL COMMENT '分类/标签ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `a_id` bigint(20) NOT NULL COMMENT '文章ID',
+  `m_id` bigint(20) NOT NULL COMMENT '分类/标签ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
