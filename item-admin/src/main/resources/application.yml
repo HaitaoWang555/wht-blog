@@ -5,6 +5,7 @@ spring:
     multipart:
       enabled: true #开启文件上传
       max-file-size: 10MB #限制文件上传大小为10M
+      location: upload/
 
 mybatis:
   mapper-locations:
@@ -49,3 +50,4 @@ secure:
       - /admin/register
       - /admin/info
       - /admin/logout
+      - /upload/**
