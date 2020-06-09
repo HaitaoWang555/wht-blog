@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wht.item.portal.dao.MetasDao">
+    <resultMap id="BaseResultMap" type="com.wht.item.portal.dto.MetaDto" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+
+        <collection property="articles" ofType="com.wht.item.portal.dto.ArticleInfoDto">
+            <id column="aid" property="id" jdbcType="BIGINT"/>
+            <result column="title" property="title" jdbcType="VARCHAR"/>
+        </collection>
+
+    </resultMap>
+    <select id="selectMetasDtoPublish" resultMap="BaseResultMap">
+    SELECT
+      m.*, a.id,a.title, mi.*,
+      m.id 'mid',
+      a.id 'aid',
+      mi.id 'miId'
+    FROM
+      cms_meta m
+        LEFT JOIN cms_middle mi ON m.id = mi.m_id
+        LEFT JOIN cms_article a ON a.id = mi.a_id AND a.status = 'publish'
+    where m.type = #{type,jdbcType=VARCHAR}
+  </select>
+</mapper>
