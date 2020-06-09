@@ -43,7 +43,7 @@ public class CmsArticleServiceImpl implements CmsArticleService {
 
     @Override
     public int update(Long id, CmsArticle cmsArticle) {
-        return articleMapper.updateByPrimaryKeyWithBLOBs(cmsArticle);
+        return articleMapper.updateByPrimaryKeySelective(cmsArticle);
     }
 
     @Override

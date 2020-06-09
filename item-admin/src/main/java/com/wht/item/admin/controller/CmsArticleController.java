@@ -93,6 +93,24 @@ public class CmsArticleController {
         }
     }
 
+    @ApiOperation("更新")
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult update(@PathVariable Long id, @RequestBody CmsArticleParam cmsArticleParam) {
+        CmsArticle cmsArticle = new CmsArticle();
+        BeanUtils.copyProperties(cmsArticleParam, cmsArticle);
+        cmsArticle.setId(id);
+        int count = articleService.update(id, cmsArticle);
+        if (count > 0) {
+            String tags = cmsArticle.getTags();
+            String category = cmsArticle.getCategory();
+            if (StringUtils.isNotBlank(tags)) metasService.saveOrRemoveMeta(tags, "tag", id);
+            if (StringUtils.isNotBlank(category)) metasService.saveOrRemoveMeta(category, "category", id);
+            return CommonResult.success("修改成功");
+        }
+        return CommonResult.failed();
+    }
+
     @ApiOperation("分页模糊查询")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
@@ -112,8 +130,8 @@ public class CmsArticleController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult<CmsArticle> getItem(@PathVariable Long id) {
-        CmsArticle cmsMeta = articleService.getItem(id);
-        return CommonResult.success(cmsMeta);
+        CmsArticle cmsArticle = articleService.getItem(id);
+        return CommonResult.success(cmsArticle);
     }
 
     @ApiOperation("批量删除")

@@ -26,7 +26,7 @@ public interface CmsArticleService {
     CmsArticle getItem(Long id);
 
     /**
-     * 修改资源
+     * 修改
      */
     int update(Long id, CmsArticle cmsArticle);
     /**
