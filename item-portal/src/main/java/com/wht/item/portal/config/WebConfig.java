@@ -1,4 +1,4 @@
-package com.wht.item.admin.config;
+package com.wht.item.portal.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,7 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void configurePathMatch(PathMatchConfigurer configurer) {
-                configurer.addPathPrefix("/api/manage", c -> c.isAnnotationPresent(RestController.class));
+                configurer.addPathPrefix("/api/portal", c -> c.isAnnotationPresent(RestController.class));
             }
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
