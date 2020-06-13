@@ -9,6 +9,7 @@ import com.wht.item.admin.dto.UmsAdminParam;
 import com.wht.item.admin.dto.UpdateAdminPasswordParam;
 import com.wht.item.admin.service.UmsAdminCacheService;
 import com.wht.item.admin.service.UmsAdminService;
+import com.wht.item.common.util.Util;
 import com.wht.item.mapper.UmsAdminLoginLogMapper;
 import com.wht.item.mapper.UmsAdminMapper;
 import com.wht.item.mapper.UmsAdminRoleRelationMapper;
@@ -27,11 +28,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -126,9 +124,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         UmsAdminLoginLog loginLog = new UmsAdminLoginLog();
         loginLog.setAdminId(admin.getId());
         loginLog.setCreateTime(new Date());
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
-        loginLog.setIp(request.getRemoteAddr());
+        loginLog.setIp(Util.getIp());
         loginLogMapper.insert(loginLog);
     }
 
