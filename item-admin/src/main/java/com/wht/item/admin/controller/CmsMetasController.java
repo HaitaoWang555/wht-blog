@@ -9,7 +9,6 @@ import com.wht.item.common.api.CommonResult;
 import com.wht.item.model.CmsMeta;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,8 +25,8 @@ import java.util.List;
  * @author wht
  * @since 2020-05-30 19:36
  */
-@Controller
-@Api(tags = "CmsMetasController", description = "属性(标签和分类)管理")
+@RestController
+@Api(tags = "属性(标签和分类)管理")
 @RequestMapping("/metas")
 public class CmsMetasController {
 
@@ -35,8 +34,7 @@ public class CmsMetasController {
     private CmsMetasService metasService;
 
     @ApiOperation("添加属性")
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping("/create")
     public CommonResult create(@RequestBody CmsMeta cmsMeta) {
         int count = metasService.create(cmsMeta);
         if (count > 0) {
@@ -47,8 +45,7 @@ public class CmsMetasController {
     }
 
     @ApiOperation("根据ID删除标签和分类")
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping("/delete/{id}")
     public CommonResult delete(@PathVariable Long id) {
         int count = metasService.delete(id);
         if (count > 0) {
@@ -59,8 +56,7 @@ public class CmsMetasController {
     }
 
     @ApiOperation("批量删除")
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping("/delete")
     public CommonResult delete(@RequestParam("ids") List<Long> ids) {
         int count = metasService.delete(ids);
         if (count > 0) {
@@ -70,16 +66,14 @@ public class CmsMetasController {
     }
 
     @ApiOperation("根据ID获取标签和分类详情")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    @ResponseBody
+    @GetMapping("/{id}")
     public CommonResult<CmsMeta> getItem(@PathVariable Long id) {
         CmsMeta cmsMeta = metasService.getItem(id);
         return CommonResult.success(cmsMeta);
     }
 
     @ApiOperation("修改标签和分类")
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping("/update/{id}")
     public CommonResult update(@PathVariable Long id,
                                @RequestBody CmsMeta cmsMeta) {
         int count = metasService.update(id, cmsMeta);
@@ -91,16 +85,14 @@ public class CmsMetasController {
     }
 
     @ApiOperation("查询所有标签和分类")
-    @RequestMapping(value = "/listAll", method = RequestMethod.GET)
-    @ResponseBody
+    @GetMapping("/listAll")
     public CommonResult<List<CmsMeta>> listAll() {
         List<CmsMeta> resourceList = metasService.listAll();
         return CommonResult.success(resourceList);
     }
 
     @ApiOperation("分页模糊查询标签和分类")
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    @ResponseBody
+    @GetMapping("/list")
     public CommonResult<CommonPage<CmsMeta>> list(
             @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(value = "type", required = false) String type,
@@ -112,8 +104,7 @@ public class CmsMetasController {
     }
 
     @ApiOperation("查询所有标签和分类")
-    @RequestMapping(value = "/import", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping("/import")
     public CommonResult importByExcel(MultipartFile file) throws IOException {
         UploadMeatsExcelListener uploadExcelListener = new UploadMeatsExcelListener();
         uploadExcelListener.metasService = metasService;
@@ -122,8 +113,7 @@ public class CmsMetasController {
     }
 
     @ApiOperation("查询所有标签和分类")
-    @RequestMapping(value = "/downloadTemplate", method = RequestMethod.GET)
-    @ResponseBody
+    @GetMapping("/downloadTemplate")
     public void downloadTemplate( HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");

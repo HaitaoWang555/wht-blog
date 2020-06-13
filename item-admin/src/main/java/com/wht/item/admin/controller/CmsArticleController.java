@@ -26,7 +26,6 @@ import org.fit.cssbox.css.DOMAnalyzer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
@@ -57,8 +56,8 @@ import java.util.stream.Collectors;
  * @since 2020-05-31 2:19
  */
 
-@Controller
-@Api(tags = "CmsArticleController", description = "内容管理 博客文章")
+@RestController
+@Api(tags = "内容管理 博客文章")
 @RequestMapping("/article")
 public class CmsArticleController {
     @Resource
@@ -71,8 +70,7 @@ public class CmsArticleController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CmsArticleController.class);
 
     @ApiOperation("添加")
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping("/create")
     public CommonResult create(@RequestBody CmsArticleParam cmsArticleParam, Principal principal) {
         CmsArticle cmsArticle = new CmsArticle();
         BeanUtils.copyProperties(cmsArticleParam, cmsArticle);
@@ -94,8 +92,7 @@ public class CmsArticleController {
     }
 
     @ApiOperation("更新")
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping("/update/{id}")
     public CommonResult update(@PathVariable Long id, @RequestBody CmsArticleParam cmsArticleParam) {
         CmsArticle cmsArticle = new CmsArticle();
         BeanUtils.copyProperties(cmsArticleParam, cmsArticle);
@@ -112,8 +109,7 @@ public class CmsArticleController {
     }
 
     @ApiOperation("分页模糊查询")
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    @ResponseBody
+    @GetMapping("/list")
     public CommonResult<CommonPage<CmsArticle>> list(
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "status", required = false) String status,
@@ -127,16 +123,14 @@ public class CmsArticleController {
     }
 
     @ApiOperation("根据ID获取")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    @ResponseBody
+    @GetMapping("/{id}")
     public CommonResult<CmsArticle> getItem(@PathVariable Long id) {
         CmsArticle cmsArticle = articleService.getItem(id);
         return CommonResult.success(cmsArticle);
     }
 
     @ApiOperation("批量删除")
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping("/delete")
     public CommonResult delete(@RequestParam("ids") List<Long> ids) {
         int count = articleService.delete(ids);
         if (count > 0) {
@@ -146,8 +140,7 @@ public class CmsArticleController {
     }
 
     @ApiOperation("图片上传")
-    @RequestMapping(value = "/upload/img", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping("/upload/img")
     public CommonResult uploadImg(@RequestParam("file") MultipartFile file, Principal principal) {
         if (file.isEmpty()) {
             return CommonResult.failed("文件为空");
@@ -184,8 +177,7 @@ public class CmsArticleController {
     }
 
     @ApiOperation("文章上传")
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping("/upload")
     public CommonResult uploadArticle(@RequestParam("file") MultipartFile file, Principal principal) throws IOException, TransformerException, ParserConfigurationException {
         String fileName = file.getOriginalFilename();
         InputStream inputStream = file.getInputStream();
@@ -201,8 +193,7 @@ public class CmsArticleController {
     }
 
     @ApiOperation("文章上传文件夹")
-    @RequestMapping(value = "/uploadDir", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping("/uploadDir")
     public CommonResult uploadDir(@RequestParam(required =false, value = "file") MultipartFile[] multipartFiles, Principal principal) throws IOException, TransformerException, ParserConfigurationException {
         for (MultipartFile file : multipartFiles) {
             String fileName = file.getOriginalFilename();
