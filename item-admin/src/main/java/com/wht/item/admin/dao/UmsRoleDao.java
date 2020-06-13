@@ -17,4 +17,5 @@ public interface UmsRoleDao {
     List<UmsMenu> getMenuListByRoleId(@Param("roleId") Long roleId);
 
     List<UmsResource> getResourceListByRoleId(@Param("roleId") Long roleId);
+    List<UmsResource> getResourceList(@Param("adminId") Long adminId);
 }

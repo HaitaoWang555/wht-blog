@@ -44,6 +44,12 @@ public interface UmsRoleService {
      */
     List<UmsMenu> getMenuList(Long adminId);
 
+
+    /**
+     * 根据管理员ID获取相关资源
+     */
+    List<UmsResource> getResourceList(Long adminId);
+
     /**
      * 获取角色相关菜单
      */

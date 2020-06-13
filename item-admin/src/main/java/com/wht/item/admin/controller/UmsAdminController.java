@@ -1,5 +1,6 @@
 package com.wht.item.admin.controller;
 
+import com.wht.item.admin.service.UmsAdminCacheService;
 import com.wht.item.common.api.CommonPage;
 import com.wht.item.common.api.CommonResult;
 import com.wht.item.admin.dto.UmsAdminLoginParam;
@@ -39,6 +40,8 @@ public class UmsAdminController {
     private String tokenHead;
     @Resource
     private UmsAdminService adminService;
+    @Resource
+    private UmsAdminCacheService adminCacheService;
     @Resource
     private UmsRoleService roleService;
 
@@ -90,8 +93,8 @@ public class UmsAdminController {
         Map<String, Object> data = new HashMap<>();
         data.put("username", umsAdmin.getUsername());
         data.put("userId", umsAdmin.getId());
-        data.put("roles", new String[]{"TEST"});
         data.put("menus", roleService.getMenuList(umsAdmin.getId()));
+        data.put("resource", adminCacheService.getResourceList(umsAdmin.getId()));
         data.put("icon", umsAdmin.getIcon());
         return CommonResult.success(data);
     }
