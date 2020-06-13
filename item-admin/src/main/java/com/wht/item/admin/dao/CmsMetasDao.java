@@ -16,4 +16,6 @@ public interface CmsMetasDao {
     List<CmsMeta> selectByArticle(@Param("articleId") Long articleId, @Param("type") String type);
 
     CmsMeta selectByName(String name);
+
+    List<CmsMeta> searchByIds(@Param("ids")String[] ids);
 }

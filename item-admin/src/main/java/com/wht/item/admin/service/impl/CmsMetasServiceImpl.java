@@ -39,6 +39,11 @@ public class CmsMetasServiceImpl implements CmsMetasService {
     }
 
     @Override
+    public List<CmsMeta> searchByIds(String[] ids) {
+        return metasDao.searchByIds(ids);
+    }
+
+    @Override
     public CmsMeta getItem(Long id) {
         return metaMapper.selectByPrimaryKey(id);
     }

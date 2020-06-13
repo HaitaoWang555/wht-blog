@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -112,7 +113,7 @@ public class CmsMetasController {
         return CommonResult.success("导入成功");
     }
 
-    @ApiOperation("查询所有标签和分类")
+    @ApiOperation("下载导入模板")
     @GetMapping("/downloadTemplate")
     public void downloadTemplate( HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
@@ -122,4 +123,29 @@ public class CmsMetasController {
         List<CmsMetasParam> metas = new ArrayList<>();
         EasyExcel.write(response.getOutputStream(), CmsMetasParam.class).sheet("标签与分类").doWrite(metas);
     }
+
+    @ApiOperation("导出数据")
+    @GetMapping("/export")
+    public void download(
+            @RequestParam(value = "ids", required = false) String ids,
+            HttpServletResponse response
+    ) throws IOException {
+        // 这里注意 有同学反应下载的文件名不对。这个时候 请别使用swagger 他会有影响
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码
+        String fileName = URLEncoder.encode("标签与分类", "UTF-8");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+        EasyExcel.write(response.getOutputStream(), CmsMetasParam.class).sheet("标签与分类").doWrite(downloadMeta(ids));
+    }
+
+    private List<CmsMeta> downloadMeta(String ids) {
+        if (StringUtils.isEmpty(ids)) {
+            return metasService.listAll();
+        } else {
+            String[] idArr = ids.split(",");
+            return metasService.searchByIds(idArr);
+        }
+    }
+
 }

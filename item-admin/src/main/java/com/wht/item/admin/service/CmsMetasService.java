@@ -16,7 +16,10 @@ public interface CmsMetasService {
      * 获取所有
      */
     List<CmsMeta> listAll();
-
+    /**
+     * 根据Ids获取
+     */
+    List<CmsMeta> searchByIds(String[] ids);
     /**
      * 根据ID获取
      */

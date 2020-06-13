@@ -24,4 +24,12 @@
         from cms_meta
         where name = #{name,jdbcType=VARCHAR}
     </select>
+    <select id="searchByIds" resultMap="BaseResultMap">
+        select * from cms_meta
+        where id in
+        <foreach item="item" index="index" collection="ids"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>
