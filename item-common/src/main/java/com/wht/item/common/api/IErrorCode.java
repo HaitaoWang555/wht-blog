@@ -5,7 +5,7 @@ package com.wht.item.common.api;
  * Created by wht on 2019/4/19.
  */
 public interface IErrorCode {
-    long getCode();
+    int getCode();
 
     String getMessage();
 }

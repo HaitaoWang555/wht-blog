@@ -5,14 +5,14 @@ package com.wht.item.common.api;
  * Created by wht on 2019/4/19.
  */
 public class CommonResult<T> {
-    private long code;
+    private int code;
     private String message;
     private T data;
 
     protected CommonResult() {
     }
 
-    protected CommonResult(long code, String message, T data) {
+    protected CommonResult(int code, String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;
@@ -102,7 +102,7 @@ public class CommonResult<T> {
         return code;
     }
 
-    public void setCode(long code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
