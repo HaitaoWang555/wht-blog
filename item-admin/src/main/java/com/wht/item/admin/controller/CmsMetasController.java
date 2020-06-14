@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 属性(标签和分类)管理 Controller
@@ -139,13 +140,22 @@ public class CmsMetasController {
         EasyExcel.write(response.getOutputStream(), CmsMetasParam.class).sheet("标签与分类").doWrite(downloadMeta(ids));
     }
 
-    private List<CmsMeta> downloadMeta(String ids) {
+    private List<CmsMetasParam> downloadMeta(String ids) {
         if (StringUtils.isEmpty(ids)) {
-            return metasService.listAll();
+            return toCmsMetasParam(metasService.listAll());
         } else {
             String[] idArr = ids.split(",");
-            return metasService.searchByIds(idArr);
+            return toCmsMetasParam(metasService.searchByIds(idArr));
         }
+    }
+
+    private List<CmsMetasParam> toCmsMetasParam(List<CmsMeta> cmsMetas) {
+        return cmsMetas.stream().map(cmsMeta -> {
+            CmsMetasParam obj = new CmsMetasParam();
+            obj.setName(cmsMeta.getName());
+            obj.setType(cmsMeta.getType());
+            return obj;
+        }).collect(Collectors.toList());
     }
 
 }
