@@ -37,3 +37,4 @@ build/
 /upload/
 /src/main/resources/rebel.xml
 /src/main/resources/application-prod.yml
+/.rebel.xml.bak
