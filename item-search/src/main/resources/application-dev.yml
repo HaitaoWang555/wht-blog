@@ -3,8 +3,8 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
-      cluster-name: wht-elasticsearch
-      cluster-nodes: 49.233.162.168:9309
+      cluster-name: my-elasticsearch
+      cluster-nodes: localhost:9300
 
   datasource:
     url: jdbc:mysql://localhost:3307/blog?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
