@@ -22,6 +22,11 @@ public interface EsCmsPoetryService {
     EsCmsPoetry create(Long id);
 
     /**
+     * 根据EsCmsPoetry创建商品
+     */
+    EsCmsPoetry create(EsCmsPoetry esCmsPoetry);
+
+    /**
      * 批量删除商品
      */
     void delete(List<Long> ids);
@@ -31,4 +36,8 @@ public interface EsCmsPoetryService {
      */
     Page<EsCmsPoetry> search(String keyword, Integer pageNum, Integer pageSize);
 
+    /**
+     * 根据关键字搜索名称或者副标题
+     */
+    Page<EsCmsPoetry> search(String title, String dynasty, String author, String content, Integer pageNum, Integer pageSize);
 }

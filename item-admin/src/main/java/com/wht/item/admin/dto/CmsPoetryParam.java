@@ -3,6 +3,7 @@ package com.wht.item.admin.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 
@@ -14,10 +15,12 @@ public class CmsPoetryParam {
     private String title;
 
     @ApiModelProperty(value = "朝代", required = true)
+    @Length(message = "朝代最大长度不能超过10", max = 10)
     @NotNull(message = "朝代不能为空")
     private String dynasty;
 
     @ApiModelProperty(value = "作者", required = true)
+    @Length(message = "作者最大长度不能超过10", max = 10)
     @NotNull(message = "作者不能为空")
     private String author;
 

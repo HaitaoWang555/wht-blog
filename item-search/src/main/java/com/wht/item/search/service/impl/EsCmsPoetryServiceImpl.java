@@ -84,6 +84,11 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
     }
 
     @Override
+    public EsCmsPoetry create(EsCmsPoetry esCmsPoetry) {
+        return esPoetryRepository.save(esCmsPoetry);
+    }
+
+    @Override
     public void delete(List<Long> ids) {
         if (!CollectionUtils.isEmpty(ids)) {
             List<EsCmsPoetry> esProductList = new ArrayList<>();
@@ -98,7 +103,15 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
 
     @Override
     public Page<EsCmsPoetry> search(String keyword, Integer pageNum, Integer pageSize) {
+        if (pageNum * pageSize > 10000) pageNum = 10000 / pageSize - 1;
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         return esPoetryRepository.findByTitleOrDynastyOrAuthorOrContent(keyword, keyword, keyword, keyword, pageable);
+    }
+
+    @Override
+    public Page<EsCmsPoetry> search(String title, String dynasty, String author, String content, Integer pageNum, Integer pageSize) {
+        if (pageNum * pageSize > 10000) pageNum = 10000 / pageSize - 1;
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        return esPoetryRepository.findByTitleOrDynastyOrAuthorOrContent(title, dynasty, author, content, pageable);
     }
 }

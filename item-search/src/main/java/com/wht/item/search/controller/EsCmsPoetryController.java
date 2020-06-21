@@ -39,7 +39,7 @@ public class EsCmsPoetryController {
     }
 
     @ApiOperation(value = "根据id批量删除商品")
-    @PostMapping("/delete/batch")
+    @GetMapping("/delete/batch")
     public CommonResult<Object> delete(@RequestParam("ids") List<Long> ids) {
         esPoetryService.delete(ids);
         return CommonResult.success(null);
@@ -56,6 +56,19 @@ public class EsCmsPoetryController {
         }
     }
 
+    @ApiOperation(value = "根据EsCmsPoetry创建商品")
+    @PostMapping("/create")
+    public CommonResult<EsCmsPoetry> create(
+            @RequestBody EsCmsPoetry esCmsPoetry
+    ) {
+        EsCmsPoetry esPoetry = esPoetryService.create(esCmsPoetry);
+        if (esPoetry != null) {
+            return CommonResult.success(esPoetry);
+        } else {
+            return CommonResult.failed();
+        }
+    }
+
     @ApiOperation(value = "简单搜索")
     @GetMapping("/search")
     public CommonResult<CommonPage<EsCmsPoetry>> search(
@@ -63,6 +76,17 @@ public class EsCmsPoetryController {
             @RequestParam(required = false, defaultValue = "0") Integer pageNum,
             @RequestParam(required = false, defaultValue = "5") Integer pageSize) {
         Page<EsCmsPoetry> esProductPage = esPoetryService.search(keyword, pageNum, pageSize);
+        return CommonResult.success(CommonPage.restPage(esProductPage));
+    }
+
+    @ApiOperation(value = "简单搜索")
+    @GetMapping("/searchA")
+    public CommonResult<CommonPage<EsCmsPoetry>> searchA(
+            @RequestParam(required = false) String title, @RequestParam(required = false) String dynasty,
+            @RequestParam(required = false) String author, @RequestParam(required = false) String content,
+            @RequestParam(required = false, defaultValue = "0") Integer pageNum,
+            @RequestParam(required = false, defaultValue = "5") Integer pageSize) {
+        Page<EsCmsPoetry> esProductPage = esPoetryService.search(title, dynasty, author, content,  pageNum, pageSize);
         return CommonResult.success(CommonPage.restPage(esProductPage));
     }
 }

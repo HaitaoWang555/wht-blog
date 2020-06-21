@@ -13,6 +13,10 @@ public interface CmsPoetryService {
     int updatePoetry(int id, CmsPoetryParam cmsPoetryParam);
 
     int deletePoetry(int id);
+    /**
+     * 批量删除
+     */
+    int deletePoetry(List<Integer> ids);
 
     List<CmsPoetry> listPoetry(int pageNum, int pageSize);
 
