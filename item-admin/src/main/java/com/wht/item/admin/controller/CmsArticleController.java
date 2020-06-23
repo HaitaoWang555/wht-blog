@@ -184,7 +184,7 @@ public class CmsArticleController {
         assert fileName != null;
         String username = principal.getName();
         UmsAdmin umsAdmin = adminService.getAdminByUsername(username);
-        String suffix = fileName.substring(fileName.indexOf(".") + 1);
+        String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
         String content = getArticleContent(suffix, inputStream, umsAdmin.getId().toString());
         if (content.equals("")) {
             return CommonResult.failed("格式不正确");
