@@ -48,7 +48,7 @@ public class CmsArticleServiceImpl implements CmsArticleService {
 
     @Override
     public List<CmsArticle> list(String title, String status, String meta, Long authorId, String sortBy, Integer pageSize, Integer pageNum) {
-        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.startPage(pageNum, pageSize, sortBy);
         List<Integer> metaArr = new ArrayList<>();
         if (meta != null) {
             for (String ele : meta.split(",")) {
