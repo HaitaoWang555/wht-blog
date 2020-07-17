@@ -29,7 +29,7 @@ public class AnalyticsController {
 
     @ApiOperation(value = "百度统计推送")
     @PostMapping("/baidu")
-    public CommonResult baidu(@RequestBody String url) {
+    public CommonResult baidu(@RequestParam String url) {
         String baseUrl = "http://data.zz.baidu.com/urls?site="+ site + "&token=" + token;
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(baseUrl, url, String.class);
         return CommonResult.success(responseEntity.getBody());
