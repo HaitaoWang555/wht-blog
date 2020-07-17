@@ -46,6 +46,14 @@ public class ArticleServiceImpl implements ArticleService {
         articleMapper.updateByPrimaryKey(article);
     }
 
+    @Override
+    public List<CmsArticle> getAllPublish() {
+        CmsArticleExample example = new CmsArticleExample();
+        CmsArticleExample.Criteria criteria = example.createCriteria();
+        criteria.andStatusEqualTo("publish");
+        return articleMapper.selectByExampleWithBLOBs(example);
+    }
+
     private void transformPreView(CmsArticle article) {
         String content = article.getContent();
         content =delHTMLTag(content);

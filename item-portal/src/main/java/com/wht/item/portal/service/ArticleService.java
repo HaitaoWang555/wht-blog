@@ -24,4 +24,9 @@ public interface ArticleService {
      * 更新点击量
      */
     void updateCmsArticleHits(CmsArticle cmsArticle);
+
+    /**
+     * 获取所有已发布的文章
+     */
+    List<CmsArticle> getAllPublish();
 }

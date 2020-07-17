@@ -19,3 +19,7 @@ logging:
   level:
     root: info #日志配置DEBUG,INFO,WARN,ERROR
     com.wht.item: debug
+
+baidu:
+  site: xxxxxxxx
+  token: xxxxxxx

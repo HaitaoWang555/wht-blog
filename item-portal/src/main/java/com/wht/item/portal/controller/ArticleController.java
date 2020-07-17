@@ -1,5 +1,6 @@
 package com.wht.item.portal.controller;
 
+import com.wht.item.common.api.CommonPage;
 import com.wht.item.common.api.CommonResult;
 import com.wht.item.model.CmsArticle;
 import com.wht.item.portal.service.ArticleService;
@@ -8,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 文章
@@ -38,5 +40,12 @@ public class ArticleController {
         } else {
             return CommonResult.failed("文章不存在");
         }
+    }
+
+    @ApiOperation("获取所有已发布的文章")
+    @GetMapping("/allPublish")
+    public CommonResult<CommonPage<CmsArticle>> getAllPublish() {
+        List<CmsArticle> resourceList = articleService.getAllPublish();
+        return CommonResult.success(CommonPage.restPage(resourceList));
     }
 }
