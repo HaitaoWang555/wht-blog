@@ -1,7 +1,6 @@
 package com.wht.item.admin.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.wht.item.admin.dao.CmsPoetryDao;
 import com.wht.item.admin.dto.CmsPoetryParam;
 import com.wht.item.admin.service.CmsPoetryService;
 import com.wht.item.mapper.CmsPoetryMapper;
@@ -17,8 +16,6 @@ import java.util.List;
 public class CmsPoetryServiceImpl implements CmsPoetryService {
     @Resource
     private CmsPoetryMapper poetryMapper;
-    @Resource
-    private CmsPoetryDao poetryDao;
 
     @Override
     public List<CmsPoetry> listAllPoetry() {
@@ -29,7 +26,7 @@ public class CmsPoetryServiceImpl implements CmsPoetryService {
     public int createPoetry(CmsPoetryParam cmsPoetryParam) {
         CmsPoetry poetry = new CmsPoetry();
         BeanUtils.copyProperties(cmsPoetryParam, poetry);
-        poetryDao.insertSelective(poetry);
+        poetryMapper.insertSelective(poetry);
         return poetry.getId();
     }
 
