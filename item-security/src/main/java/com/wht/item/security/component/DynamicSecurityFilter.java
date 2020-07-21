@@ -12,6 +12,7 @@ import org.springframework.util.PathMatcher;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -25,6 +26,9 @@ public class DynamicSecurityFilter extends AbstractSecurityInterceptor implement
     @Autowired
     private IgnoreUrlsConfig ignoreUrlsConfig;
 
+    private static final String FILTER_APPLIED = "__spring_security_myDynamicSecurityFilter_filterApplied";
+
+
     @Autowired
     public void setMyAccessDecisionManager(DynamicAccessDecisionManager dynamicAccessDecisionManager) {
         super.setAccessDecisionManager(dynamicAccessDecisionManager);
@@ -37,6 +41,14 @@ public class DynamicSecurityFilter extends AbstractSecurityInterceptor implement
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+
+        if (request.getAttribute(FILTER_APPLIED) != null) {
+          filterChain.doFilter(request, response);
+          return;
+        }
+        request.setAttribute(FILTER_APPLIED, Boolean.TRUE);
+
         FilterInvocation fi = new FilterInvocation(servletRequest, servletResponse, filterChain);
         //OPTIONS请求直接放行
         if(request.getMethod().equals(HttpMethod.OPTIONS.toString())){
