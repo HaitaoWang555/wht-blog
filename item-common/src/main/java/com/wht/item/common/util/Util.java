@@ -45,4 +45,8 @@ public class Util {
         }
         return ip;
     }
+
+    public static String getUserAgent() {
+        return getRequest().getHeader("User-Agent");
+    }
 }

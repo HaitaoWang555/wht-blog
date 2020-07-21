@@ -27,6 +27,15 @@ import java.io.IOException;
 public class GlobalExceptionHandler {
 
     /**
+     * 自定义API异常
+     */
+    @ExceptionHandler(value = ApiException.class)
+    public CommonResult apiExceptionHandler(HttpServletRequest req, ApiException e) {
+        log.error("---ApiException Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(), e);
+        return CommonResult.failed(e.getErrorCode(), e.getMessage());
+    }
+
+    /**
      * 运行时异常
      *
      * @param req {@link HttpServletRequest}
@@ -37,7 +46,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public CommonResult runtimeExceptionHandler(HttpServletRequest req, HttpServletResponse rep, RuntimeException re) {
         log.error("---RuntimeException Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), re.getMessage(), re);
-        rep.setStatus(ResultCode.RUNTIME.getCode());
         return CommonResult.failed(ResultCode.RUNTIME);
     }
 
@@ -52,7 +60,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     public CommonResult nullPointerExceptionHandler(HttpServletRequest req, HttpServletResponse rep, NullPointerException ex) {
         log.error("---NullPointerException Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
-        rep.setStatus(ResultCode.NULL_POINTER.getCode());
         return CommonResult.failed(ResultCode.NULL_POINTER);
     }
 
@@ -67,7 +74,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ClassCastException.class)
     public CommonResult classCastExceptionHandler(HttpServletRequest req, HttpServletResponse rep, ClassCastException ex) {
         log.error("---classCastException Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
-        rep.setStatus(ResultCode.CLASS_CAST.getCode());
         return CommonResult.failed(ResultCode.CLASS_CAST);
     }
 
@@ -82,7 +88,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IOException.class)
     public CommonResult classCastExceptionHandler(HttpServletRequest req, HttpServletResponse rep, IOException ex) {
         log.error("---classCastException Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
-        rep.setStatus(ResultCode.IO.getCode());
         return CommonResult.failed(ResultCode.IO);
     }
 
@@ -97,7 +102,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoSuchMethodException.class)
     public CommonResult noSuchMethodExceptionHandler(HttpServletRequest req, HttpServletResponse rep, NoSuchMethodException ex) {
         log.error("---noSuchMethodException Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
-        rep.setStatus(ResultCode.NO_SUCH_METHOD.getCode());
         return CommonResult.failed(ResultCode.NO_SUCH_METHOD);
     }
 
@@ -112,7 +116,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IndexOutOfBoundsException.class)
     public CommonResult indexOutOfBoundsExceptionHandler(HttpServletRequest req, HttpServletResponse rep, IndexOutOfBoundsException ex) {
         log.error("---indexOutOfBoundsException Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
-        rep.setStatus(ResultCode.INDEX_OUTOF_BOUNDS.getCode());
         return CommonResult.failed(ResultCode.INDEX_OUTOF_BOUNDS);
     }
 
@@ -126,7 +129,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({HttpMessageNotReadableException.class, TypeMismatchException.class, MissingServletRequestParameterException.class})
     public CommonResult request400(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
         log.error("---request400 Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
-        rep.setStatus(ResultCode.BAD_REQUEST.getCode());
         return CommonResult.failed(ResultCode.BAD_REQUEST);
     }
 
@@ -140,7 +142,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoHandlerFoundException.class)
     public CommonResult request404(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
         log.error("---request404 Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
-        rep.setStatus(ResultCode.NOT_FOUND.getCode());
         return CommonResult.failed(ResultCode.NOT_FOUND);
     }
 
@@ -154,7 +155,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
     public CommonResult request405(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
         log.error("---request405 Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
-        rep.setStatus(ResultCode.METHOD_BOT_ALLOWED.getCode());
         return CommonResult.failed(ResultCode.METHOD_BOT_ALLOWED);
     }
 
@@ -168,7 +168,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({HttpMediaTypeNotAcceptableException.class})
     public CommonResult request406(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
         log.error("---request406 Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
-        rep.setStatus(ResultCode.NOT_ACCEPTABLE.getCode());
         return CommonResult.failed(ResultCode.NOT_ACCEPTABLE);
     }
 
@@ -182,7 +181,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({ConversionNotSupportedException.class, HttpMessageNotWritableException.class})
     public CommonResult server500(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
         log.error("---server500 Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
-        rep.setStatus(ResultCode.INTERNAL_SERVER_ERROR.getCode());
         return CommonResult.failed(ResultCode.INTERNAL_SERVER_ERROR);
     }
 

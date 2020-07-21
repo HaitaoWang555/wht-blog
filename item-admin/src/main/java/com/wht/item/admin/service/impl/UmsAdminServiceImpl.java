@@ -9,6 +9,8 @@ import com.wht.item.admin.dto.UmsAdminParam;
 import com.wht.item.admin.dto.UpdateAdminPasswordParam;
 import com.wht.item.admin.service.UmsAdminCacheService;
 import com.wht.item.admin.service.UmsAdminService;
+import com.wht.item.common.api.ResultCode;
+import com.wht.item.common.exception.ApiException;
 import com.wht.item.common.util.Util;
 import com.wht.item.mapper.UmsAdminLoginLogMapper;
 import com.wht.item.mapper.UmsAdminMapper;
@@ -101,7 +103,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         try {
             UserDetails userDetails = loadUserByUsername(username);
             if(!passwordEncoder.matches(password,userDetails.getPassword())){
-                throw new BadCredentialsException("密码不正确");
+                throw new ApiException(ResultCode.VALIDATE_FAILED, "密码不正确");
             }
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -125,6 +127,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         loginLog.setAdminId(admin.getId());
         loginLog.setCreateTime(new Date());
         loginLog.setIp(Util.getIp());
+        loginLog.setUserAgent(Util.getUserAgent());
         loginLogMapper.insert(loginLog);
     }
 
@@ -260,6 +263,6 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             List<UmsResource> resourceList = getResourceList(admin.getId());
             return new AdminUserDetails(admin,resourceList);
         }
-        throw new UsernameNotFoundException("用户名或密码错误");
+        throw new ApiException(ResultCode.VALIDATE_FAILED, "无此用户: " + username);
     }
 }
