@@ -113,4 +113,15 @@ public class CmsNoteController {
         return CommonResult.success(CommonPage.restPage(cmsNoteNodes));
     }
 
+    @ApiOperation("根据ID删除笔记")
+    @PostMapping("/delete/{id}")
+    public CommonResult delete(@PathVariable Long id) {
+        int count = noteService.delete(id);
+        if (count > 0) {
+            return CommonResult.success(count);
+        } else {
+            return CommonResult.failed();
+        }
+    }
+
 }
