@@ -11,9 +11,12 @@ import com.wht.item.model.CmsNote;
 import com.wht.item.model.UmsAdmin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.*;
 import java.security.Principal;
 import java.util.List;
 
@@ -73,6 +76,21 @@ public class CmsNoteController {
             }
         }
 
+    }
+
+    @ApiOperation("文章上传文件夹")
+    @PostMapping("/uploadDir")
+    public CommonResult uploadDir(
+            @RequestParam(required =false, value = "file") MultipartFile[] multipartFiles,
+            @RequestParam(value = "id", defaultValue = "0") Long id) throws IOException {
+        noteService.upload(multipartFiles, id);
+        return CommonResult.success("导入成功");
+    }
+
+    @ApiOperation("文章上传文件夹")
+    @GetMapping("/download")
+    public ResponseEntity download(@RequestParam(value = "id", defaultValue = "0") Long id) throws IOException {
+        return noteService.download(id);
     }
 
     @ApiOperation("修改笔记菜单")

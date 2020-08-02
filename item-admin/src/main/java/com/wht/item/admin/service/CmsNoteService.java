@@ -2,7 +2,10 @@ package com.wht.item.admin.service;
 
 import com.wht.item.admin.dto.CmsNoteNode;
 import com.wht.item.model.CmsNote;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -16,6 +19,13 @@ public interface CmsNoteService {
      * 创建笔记菜单
      */
     int create(CmsNote cmsNote);
+
+    /**
+     * 批量上传笔记
+     * @param multipartFiles 上传的笔记文件
+     * @param id 父级id
+     */
+    void upload(MultipartFile[] multipartFiles, Long id) throws IOException;
 
     /**
      * 修改笔记菜单
@@ -47,4 +57,11 @@ public interface CmsNoteService {
      * 树形结构返回所有菜单列表
      */
     List<CmsNoteNode> treeList();
+
+    /**
+     * 更新笔记文件
+     */
+    void updateFile(Long aid, String content);
+
+    ResponseEntity download(Long id) throws IOException;
 }

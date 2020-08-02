@@ -3,11 +3,11 @@ package com.wht.item.admin.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.wht.item.admin.dao.CmsArticleDao;
 import com.wht.item.admin.service.CmsArticleService;
+import com.wht.item.admin.service.CmsNoteService;
 import com.wht.item.mapper.CmsArticleMapper;
 import com.wht.item.model.CmsArticle;
 import com.wht.item.model.CmsArticleExample;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -25,6 +25,8 @@ public class CmsArticleServiceImpl implements CmsArticleService {
     private CmsArticleMapper articleMapper;
     @Resource
     private CmsArticleDao articleDao;
+    @Resource
+    private CmsNoteService noteService;
 
     @Override
     public List<CmsArticle> listAll() {
@@ -43,6 +45,9 @@ public class CmsArticleServiceImpl implements CmsArticleService {
 
     @Override
     public int update(Long id, CmsArticle cmsArticle) {
+        if (cmsArticle.getArticleType().equals("note")) {
+            noteService.updateFile(id, cmsArticle.getContent());
+        }
         return articleMapper.updateByPrimaryKeySelective(cmsArticle);
     }
 
