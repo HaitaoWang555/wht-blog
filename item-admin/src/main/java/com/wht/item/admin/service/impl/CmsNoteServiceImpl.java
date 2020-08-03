@@ -8,6 +8,7 @@ import com.google.common.collect.Multimap;
 import com.wht.item.admin.dto.CmsNoteNode;
 import com.wht.item.admin.service.CmsArticleService;
 import com.wht.item.admin.service.CmsNoteService;
+import com.wht.item.admin.util.SecurityUtil;
 import com.wht.item.common.util.ZipUtils;
 import com.wht.item.mapper.CmsNoteMapper;
 import com.wht.item.model.CmsArticle;
@@ -59,7 +60,7 @@ public class CmsNoteServiceImpl implements CmsNoteService {
         int count = noteMapper.insert(cmsNote);
         if (count > 0) {
             try {
-                createFile(getBathPath(cmsNote.getId()), "");
+                createFile(getBathPath(cmsNote.getId()), cmsNote.getMenuType(),"");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -147,10 +148,9 @@ public class CmsNoteServiceImpl implements CmsNoteService {
     }
     @Override
     public void updateFile(Long aid, String content) {
-        String path = "upload/notes/";
         String filePath = getBathPathByArticleId(aid);
         try {
-            OutputStream output = new FileOutputStream(path + filePath);
+            OutputStream output = new FileOutputStream(getNoteFilePath() + filePath);
             output.write(content.getBytes("UTF-8"));
             output.close();
         } catch (IOException e) {
@@ -161,7 +161,6 @@ public class CmsNoteServiceImpl implements CmsNoteService {
 
     @Override
     public ResponseEntity download(Long id) throws IOException {
-        String path = "upload/notes/";
         String downloadPath;
         String zipFile;
         if (id != 0) {
@@ -174,7 +173,7 @@ public class CmsNoteServiceImpl implements CmsNoteService {
         String temporaryPath = "upload/.temporaryPath/";
         File temporaryDir = new File(temporaryPath);
         if(!temporaryDir.isDirectory()) temporaryDir.mkdirs();
-        ZipUtils.doCompress(path + downloadPath, temporaryPath + zipFile + ".zip");
+        ZipUtils.doCompress(getNoteFilePath() + downloadPath, temporaryPath + zipFile + ".zip");
         File file = new File(temporaryPath + zipFile + ".zip");
         String fileName = URLEncoder.encode(file.getName(), "UTF-8");
         HttpHeaders headers = new HttpHeaders();
@@ -314,7 +313,7 @@ public class CmsNoteServiceImpl implements CmsNoteService {
             return cmsNoteList.get(0).getId();
         }
         noteMapper.insert(cmsNote);
-        createFile(path, content);
+        createFile(path, cmsNote.getMenuType(), content);
         return cmsNote.getId();
     }
 
@@ -328,27 +327,30 @@ public class CmsNoteServiceImpl implements CmsNoteService {
         return cmsArticle.getId();
     }
 
-    private void createFile(String filePath, String content) throws IOException {
-        String path = "upload/notes/";
-        File noteFile = new File(path + filePath);
+    private void createFile(String filePath, String menuType, String content) throws IOException {
+        File noteFile = new File(getNoteFilePath() + filePath);
+
 
         if(!(noteFile.getParentFile().exists())){
             noteFile.getParentFile().mkdirs();
         }
-        if(noteFile.exists()){
-            noteFile.delete();
-        }else{
-            noteFile.createNewFile();
+        if (menuType.equals("folder")) {
+            noteFile.mkdirs();
+        } else {
+            if(noteFile.exists()){
+                noteFile.delete();
+            }else{
+                noteFile.createNewFile();
+            }
+            OutputStream output = new FileOutputStream(getNoteFilePath() + filePath);
+            output.write(content.getBytes("UTF-8"));
+            output.close();
         }
 
-        OutputStream output = new FileOutputStream(path + filePath);
-        output.write(content.getBytes("UTF-8"));
-        output.close();
     }
 
     private void deleteFile(String filePath) {
-        String path = "upload/notes/";
-        File noteFile = new File(path + filePath);
+        File noteFile = new File(getNoteFilePath() + filePath);
         try {
             deleteFolder(noteFile);
         } catch (Exception e) {
@@ -378,11 +380,15 @@ public class CmsNoteServiceImpl implements CmsNoteService {
     }
 
     private void updateFileName(Long id, String fileName) {
-        String filePath = "upload/notes/" + getBathPath(id);
+        String filePath = getNoteFilePath() + getBathPath(id);
         String filePathNew = filePath.substring(0, filePath.lastIndexOf("/") + 1) + fileName;
         File file = new File(filePath);
         file.renameTo(new File(filePathNew));
 
+    }
+
+    private String getNoteFilePath() {
+        return "upload/notes/" + SecurityUtil.getCurrentUserId() + "/";
     }
 
     /**

@@ -3,12 +3,11 @@ package com.wht.item.admin.controller;
 import com.wht.item.admin.dto.CmsNoteNode;
 import com.wht.item.admin.service.CmsArticleService;
 import com.wht.item.admin.service.CmsNoteService;
-import com.wht.item.admin.service.UmsAdminService;
+import com.wht.item.admin.util.SecurityUtil;
 import com.wht.item.common.api.CommonPage;
 import com.wht.item.common.api.CommonResult;
 import com.wht.item.model.CmsArticle;
 import com.wht.item.model.CmsNote;
-import com.wht.item.model.UmsAdmin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.*;
-import java.security.Principal;
 import java.util.List;
 
 /**
@@ -34,18 +32,14 @@ public class CmsNoteController {
     @Resource
     private CmsNoteService noteService;
     @Resource
-    private UmsAdminService adminService;
-    @Resource
     private CmsArticleService articleService;
 
     @ApiOperation("添加笔记列表")
     @PostMapping("/create")
-    public CommonResult create(@RequestBody CmsNote cmsNote, Principal principal) {
+    public CommonResult create(@RequestBody CmsNote cmsNote) {
         if (cmsNote.getMenuType().equals("file")) {
             CmsArticle cmsArticle = new CmsArticle();
-            String username = principal.getName();
-            UmsAdmin umsAdmin = adminService.getAdminByUsername(username);
-            cmsArticle.setAuthorId(umsAdmin.getId());
+            cmsArticle.setAuthorId(SecurityUtil.getCurrentUserId());
             cmsArticle.setArticleType("note");
             String type;
             if (cmsNote.getName().substring(cmsNote.getName().lastIndexOf(".") + 1).equals("md")) {

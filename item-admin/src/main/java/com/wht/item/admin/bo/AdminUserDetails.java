@@ -58,4 +58,9 @@ public class AdminUserDetails implements UserDetails {
     public boolean isEnabled() {
         return umsAdmin.getStatus().equals(1);
     }
+
+
+    public Long getUserId() {
+        return umsAdmin.getId();
+    }
 }
