@@ -75,6 +75,7 @@ public class CmsArticleController {
         CmsArticle cmsArticle = new CmsArticle();
         BeanUtils.copyProperties(cmsArticleParam, cmsArticle);
         cmsArticle.setAuthorId(SecurityUtil.getCurrentUserId());
+        cmsArticle.setArticleType("blog");
         int count = articleService.create(cmsArticle);
         if (count > 0) {
             //存储分类和标签
@@ -207,6 +208,7 @@ public class CmsArticleController {
                 cmsArticle.setContent(content);
                 cmsArticle.setEditorType(type);
                 cmsArticle.setStatus("draft");
+                cmsArticle.setArticleType("blog");
                 articleService.create(cmsArticle);
             } catch (Exception e) {
                 LOGGER.error(" ERROR: {}",  e.getMessage());

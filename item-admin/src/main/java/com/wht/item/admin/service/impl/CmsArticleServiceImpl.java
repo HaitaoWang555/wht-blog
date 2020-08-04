@@ -30,12 +30,12 @@ public class CmsArticleServiceImpl implements CmsArticleService {
 
     @Override
     public List<CmsArticle> listAll() {
-        return articleMapper.selectByExample(new CmsArticleExample());
+        return articleMapper.selectByExample(example());
     }
 
     @Override
     public List<CmsArticle> listAllWithContent() {
-        return articleMapper.selectByExampleWithBLOBs(new CmsArticleExample());
+        return articleMapper.selectByExampleWithBLOBs(example());
     }
 
     @Override
@@ -79,5 +79,11 @@ public class CmsArticleServiceImpl implements CmsArticleService {
         CmsArticleExample example = new CmsArticleExample();
         example.createCriteria().andIdIn(ids);
         return articleMapper.deleteByExample(example);
+    }
+
+    private CmsArticleExample example() {
+        CmsArticleExample example = new CmsArticleExample();
+        example.createCriteria().andArticleTypeEqualTo("blog");
+        return example;
     }
 }
