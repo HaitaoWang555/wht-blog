@@ -1,5 +1,6 @@
 package com.wht.item.admin.controller;
 
+import com.alibaba.excel.EasyExcel;
 import com.wht.item.admin.dto.CmsPoetryParam;
 import com.wht.item.admin.service.CmsPoetryService;
 import com.wht.item.common.api.CommonPage;
@@ -11,13 +12,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -166,4 +169,19 @@ public class CmsPoetryController {
         }
         return CommonResult.failed();
     }
+
+    @ApiOperation("导出数据")
+    @GetMapping("/export")
+    public void download(
+            @RequestParam(value = "ids", required = false) String ids,
+            HttpServletResponse response
+    ) throws IOException {
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码
+        String fileName = URLEncoder.encode("诗词", "UTF-8");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+        EasyExcel.write(response.getOutputStream(), CmsPoetryParam.class).sheet("诗词").doWrite(poetryService.downloadPoetry(ids));
+    }
+
 }

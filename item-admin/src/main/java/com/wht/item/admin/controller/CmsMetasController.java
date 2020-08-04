@@ -105,7 +105,7 @@ public class CmsMetasController {
         return CommonResult.success(CommonPage.restPage(resourceList));
     }
 
-    @ApiOperation("查询所有标签和分类")
+    @ApiOperation("导入标签或分类")
     @PostMapping("/import")
     public CommonResult importByExcel(MultipartFile file) throws IOException {
         UploadMeatsExcelListener uploadExcelListener = new UploadMeatsExcelListener();
