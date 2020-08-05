@@ -275,9 +275,6 @@ public class CmsArticleController {
     private String getArticleContent(String suffix, InputStream inputStream) throws ParserConfigurationException, TransformerException, IOException {
         String content = "";
         switch (suffix.toLowerCase()) {
-            case "md":
-                content = handleMd(inputStream);
-                break;
             case "doc":
                 content = handleDoc(inputStream);
                 break;
@@ -285,6 +282,8 @@ public class CmsArticleController {
                 content = handleDocx(inputStream);
                 break;
             default:
+                content = handleMd(inputStream);
+                break;
         }
         return content;
     }

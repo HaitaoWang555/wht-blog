@@ -160,6 +160,16 @@ public class CmsNoteServiceImpl implements CmsNoteService {
     }
 
     @Override
+    public Long changeToArticle(Long id, CmsArticle cmsArticle) {
+        articleService.update(id, cmsArticle);
+        cmsArticle.setArticleType("blog");
+        cmsArticle.setStatus("draft");
+        int count = articleService.create(cmsArticle);
+
+        return count > 0 ? cmsArticle.getId() : 0;
+    }
+
+    @Override
     public ResponseEntity download(Long id) throws IOException {
         String downloadPath;
         String zipFile;

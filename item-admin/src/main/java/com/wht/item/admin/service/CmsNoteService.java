@@ -1,6 +1,7 @@
 package com.wht.item.admin.service;
 
 import com.wht.item.admin.dto.CmsNoteNode;
+import com.wht.item.model.CmsArticle;
 import com.wht.item.model.CmsNote;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,5 +64,14 @@ public interface CmsNoteService {
      */
     void updateFile(Long aid, String content);
 
+    /**
+     * 复制到文章
+     */
+    Long changeToArticle(Long id, CmsArticle cmsArticle);
+
+    /**
+     * 下载笔记
+     * @param id 笔记ID
+     */
     ResponseEntity download(Long id) throws IOException;
 }

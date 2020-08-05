@@ -1,5 +1,6 @@
 package com.wht.item.admin.controller;
 
+import com.wht.item.admin.dto.CmsArticleParam;
 import com.wht.item.admin.dto.CmsNoteNode;
 import com.wht.item.admin.service.CmsArticleService;
 import com.wht.item.admin.service.CmsNoteService;
@@ -10,6 +11,7 @@ import com.wht.item.model.CmsArticle;
 import com.wht.item.model.CmsNote;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,13 +43,7 @@ public class CmsNoteController {
             CmsArticle cmsArticle = new CmsArticle();
             cmsArticle.setAuthorId(SecurityUtil.getCurrentUserId());
             cmsArticle.setArticleType("note");
-            String type;
-            if (cmsNote.getName().substring(cmsNote.getName().lastIndexOf(".") + 1).equals("md")) {
-                type = "markdownEditor";
-            } else {
-                type = "tinymceEditor";
-            }
-            cmsArticle.setEditorType(type);
+            cmsArticle.setEditorType("markdownEditor");
             cmsArticle.setTitle(cmsNote.getName());
             int aCount = articleService.create(cmsArticle);
             if (aCount > 0) {
@@ -97,6 +93,20 @@ public class CmsNoteController {
         int count = noteService.update(id, cmsNote);
         if (count > 0) {
             return CommonResult.success(cmsNote.getId());
+        } else {
+            return CommonResult.failed();
+        }
+    }
+
+    @ApiOperation("修改笔记菜单")
+    @PostMapping("/toArticle/{id}")
+    public CommonResult changeToArticle(@PathVariable Long id, @RequestBody CmsArticleParam cmsArticleParam) {
+        CmsArticle cmsArticle = new CmsArticle();
+        BeanUtils.copyProperties(cmsArticleParam, cmsArticle);
+        cmsArticle.setId(id);
+        Long aid = noteService.changeToArticle(id, cmsArticle);
+        if (aid > 0) {
+            return CommonResult.success(aid, "已成功复制到文章");
         } else {
             return CommonResult.failed();
         }
