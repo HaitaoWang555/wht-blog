@@ -1,5 +1,6 @@
 package com.wht.item.admin.service.impl;
 
+import cn.hutool.core.lang.UUID;
 import com.github.pagehelper.PageHelper;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ArrayListMultimap;
@@ -180,7 +181,7 @@ public class CmsNoteServiceImpl implements CmsNoteService {
             downloadPath = "";
             zipFile = "allNote";
         }
-        String temporaryPath = "upload/.temporaryPath/";
+        String temporaryPath = "upload/.temporaryPath/" + UUID.randomUUID() + "/";
         File temporaryDir = new File(temporaryPath);
         if(!temporaryDir.isDirectory()) temporaryDir.mkdirs();
         ZipUtils.doCompress(getNoteFilePath() + downloadPath, temporaryPath + zipFile + ".zip");

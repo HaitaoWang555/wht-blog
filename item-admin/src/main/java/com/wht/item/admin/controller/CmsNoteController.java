@@ -68,7 +68,7 @@ public class CmsNoteController {
 
     }
 
-    @ApiOperation("文章上传文件夹")
+    @ApiOperation("笔记上传文件夹")
     @PostMapping("/uploadDir")
     public CommonResult uploadDir(
             @RequestParam(required =false, value = "file") MultipartFile[] multipartFiles,
@@ -77,7 +77,7 @@ public class CmsNoteController {
         return CommonResult.success("导入成功");
     }
 
-    @ApiOperation("文章上传文件夹")
+    @ApiOperation("笔记下载")
     @GetMapping("/download")
     public ResponseEntity download(@RequestParam(value = "id", defaultValue = "0") Long id) throws IOException {
         return noteService.download(id);
@@ -98,7 +98,7 @@ public class CmsNoteController {
         }
     }
 
-    @ApiOperation("修改笔记菜单")
+    @ApiOperation("复制到文章")
     @PostMapping("/toArticle/{id}")
     public CommonResult changeToArticle(@PathVariable Long id, @RequestBody CmsArticleParam cmsArticleParam) {
         CmsArticle cmsArticle = new CmsArticle();
@@ -121,7 +121,7 @@ public class CmsNoteController {
         return CommonResult.success(CommonPage.restPage(cmsNotes));
     }
 
-    @ApiOperation("分页查询笔记列表")
+    @ApiOperation("全部笔记列表")
     @GetMapping("/allList")
     public CommonResult<CommonPage<CmsNote>> allList() {
         List<CmsNote> cmsNotes = noteService.listAll();
