@@ -824,6 +824,66 @@ public class CmsArticleExample {
             addCriterion("updated_time not between", value1, value2, "updatedTime");
             return (Criteria) this;
         }
+
+        public Criteria andUpdatedContentTimeIsNull() {
+            addCriterion("updated_content_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeIsNotNull() {
+            addCriterion("updated_content_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeEqualTo(Date value) {
+            addCriterion("updated_content_time =", value, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeNotEqualTo(Date value) {
+            addCriterion("updated_content_time <>", value, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeGreaterThan(Date value) {
+            addCriterion("updated_content_time >", value, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("updated_content_time >=", value, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeLessThan(Date value) {
+            addCriterion("updated_content_time <", value, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeLessThanOrEqualTo(Date value) {
+            addCriterion("updated_content_time <=", value, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeIn(List<Date> values) {
+            addCriterion("updated_content_time in", values, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeNotIn(List<Date> values) {
+            addCriterion("updated_content_time not in", values, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeBetween(Date value1, Date value2) {
+            addCriterion("updated_content_time between", value1, value2, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeNotBetween(Date value1, Date value2) {
+            addCriterion("updated_content_time not between", value1, value2, "updatedContentTime");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

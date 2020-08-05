@@ -27,7 +27,7 @@ public class ArticleServiceImpl implements ArticleService {
         CmsArticleExample example = new CmsArticleExample();
         CmsArticleExample.Criteria criteria = example.createCriteria();
         criteria.andStatusEqualTo("publish");
-        example.setOrderByClause("updated_time desc");
+        example.setOrderByClause("updated_content_time desc");
         List<CmsArticle> articleList = articleMapper.selectByExampleWithBLOBs(example);
         for (CmsArticle item : articleList) {
             transformPreView(item);

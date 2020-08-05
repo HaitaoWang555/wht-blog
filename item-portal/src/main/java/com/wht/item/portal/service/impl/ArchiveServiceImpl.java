@@ -33,7 +33,7 @@ public class ArchiveServiceImpl implements ArchiveService {
         String current = "";
         SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM" );
         for (CmsArticle article:articleList) {
-            String dateStr = sdf.format(article.getUpdatedTime());
+            String dateStr = sdf.format(article.getUpdatedContentTime());
             if (dateStr.equals(current)) {
                 Archives arc = archivesList.get(archivesList.size() - 1);
                 arc.getArticle().add(article);

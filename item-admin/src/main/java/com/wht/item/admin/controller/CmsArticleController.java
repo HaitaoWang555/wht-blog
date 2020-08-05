@@ -95,6 +95,9 @@ public class CmsArticleController {
     public CommonResult update(@PathVariable Long id, @RequestBody CmsArticleParam cmsArticleParam) {
         CmsArticle cmsArticle = new CmsArticle();
         BeanUtils.copyProperties(cmsArticleParam, cmsArticle);
+        if (cmsArticleParam.getContentUpdate()) {
+            cmsArticle.setUpdatedContentTime(new Date());
+        }
         cmsArticle.setId(id);
         int count = articleService.update(id, cmsArticle);
         if (count > 0) {
