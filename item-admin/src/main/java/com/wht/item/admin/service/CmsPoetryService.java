@@ -20,6 +20,11 @@ public interface CmsPoetryService {
 
     List<CmsPoetry> listPoetry(int pageNum, int pageSize);
 
+    List<CmsPoetryParam> downloadPoetry(String ids);
+    /**
+     * 根据Ids获取
+     */
+    List<CmsPoetry> searchByIds(List<Integer> ids);
     List<CmsPoetry> listPoetryWithBLOBs(int pageNum, int pageSize);
 
     CmsPoetry getPoetry(int id);

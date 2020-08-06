@@ -5,6 +5,7 @@ import com.wht.item.admin.dto.CmsArticleParam;
 import com.wht.item.admin.service.CmsArticleService;
 import com.wht.item.admin.service.CmsMetasService;
 import com.wht.item.admin.service.UmsAdminService;
+import com.wht.item.admin.util.SecurityUtil;
 import com.wht.item.common.api.CommonPage;
 import com.wht.item.common.api.CommonResult;
 import com.wht.item.model.CmsArticle;
@@ -41,7 +42,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,12 +71,11 @@ public class CmsArticleController {
 
     @ApiOperation("添加")
     @PostMapping("/create")
-    public CommonResult create(@RequestBody CmsArticleParam cmsArticleParam, Principal principal) {
+    public CommonResult create(@RequestBody CmsArticleParam cmsArticleParam) {
         CmsArticle cmsArticle = new CmsArticle();
         BeanUtils.copyProperties(cmsArticleParam, cmsArticle);
-        String username = principal.getName();
-        UmsAdmin umsAdmin = adminService.getAdminByUsername(username);
-        cmsArticle.setAuthorId(umsAdmin.getId());
+        cmsArticle.setAuthorId(SecurityUtil.getCurrentUserId());
+        cmsArticle.setArticleType("blog");
         int count = articleService.create(cmsArticle);
         if (count > 0) {
             //存储分类和标签
@@ -96,6 +95,9 @@ public class CmsArticleController {
     public CommonResult update(@PathVariable Long id, @RequestBody CmsArticleParam cmsArticleParam) {
         CmsArticle cmsArticle = new CmsArticle();
         BeanUtils.copyProperties(cmsArticleParam, cmsArticle);
+        if (cmsArticleParam.getContentUpdate()) {
+            cmsArticle.setUpdatedContentTime(new Date());
+        }
         cmsArticle.setId(id);
         int count = articleService.update(id, cmsArticle);
         if (count > 0) {
@@ -141,13 +143,11 @@ public class CmsArticleController {
 
     @ApiOperation("图片上传")
     @PostMapping("/upload/img")
-    public CommonResult uploadImg(@RequestParam("file") MultipartFile file, Principal principal) {
+    public CommonResult uploadImg(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return CommonResult.failed("文件为空");
         }
-        String username = principal.getName();
-        UmsAdmin umsAdmin = adminService.getAdminByUsername(username);
-        String realPath =  createFilePath(umsAdmin.getId().toString());
+        String realPath =  createFilePath();
         String thumbnail = "thumbnail/";
         File dir = new File(realPath);
         if(!dir.isDirectory()){
@@ -178,14 +178,12 @@ public class CmsArticleController {
 
     @ApiOperation("文章上传")
     @PostMapping("/upload")
-    public CommonResult uploadArticle(@RequestParam("file") MultipartFile file, Principal principal) throws IOException, TransformerException, ParserConfigurationException {
+    public CommonResult uploadArticle(@RequestParam("file") MultipartFile file) throws IOException, TransformerException, ParserConfigurationException {
         String fileName = file.getOriginalFilename();
         InputStream inputStream = file.getInputStream();
         assert fileName != null;
-        String username = principal.getName();
-        UmsAdmin umsAdmin = adminService.getAdminByUsername(username);
         String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
-        String content = getArticleContent(suffix, inputStream, umsAdmin.getId().toString());
+        String content = getArticleContent(suffix, inputStream);
         if (content.equals("")) {
             return CommonResult.failed("格式不正确");
         }
@@ -194,14 +192,12 @@ public class CmsArticleController {
 
     @ApiOperation("文章上传文件夹")
     @PostMapping("/uploadDir")
-    public CommonResult uploadDir(@RequestParam(required =false, value = "file") MultipartFile[] multipartFiles, Principal principal) throws IOException, TransformerException, ParserConfigurationException {
+    public CommonResult uploadDir(@RequestParam(required =false, value = "file") MultipartFile[] multipartFiles) throws IOException, TransformerException, ParserConfigurationException {
         for (MultipartFile file : multipartFiles) {
             String fileName = file.getOriginalFilename();
             InputStream inputStream = file.getInputStream();
             String suffix = fileName.substring(fileName.indexOf(".") + 1);
-            String username = principal.getName();
-            UmsAdmin umsAdmin = adminService.getAdminByUsername(username);
-            String content = getArticleContent(suffix, inputStream, umsAdmin.getId().toString());
+            String content = getArticleContent(suffix, inputStream);
             if (content.equals("")) break;
             String type;
             if (suffix.equals("md")) {
@@ -215,6 +211,7 @@ public class CmsArticleController {
                 cmsArticle.setContent(content);
                 cmsArticle.setEditorType(type);
                 cmsArticle.setStatus("draft");
+                cmsArticle.setArticleType("blog");
                 articleService.create(cmsArticle);
             } catch (Exception e) {
                 LOGGER.error(" ERROR: {}",  e.getMessage());
@@ -228,11 +225,11 @@ public class CmsArticleController {
      * 创建上传文件路径
      * @return upload - 模块 - 用户ID - 时间 - 文件名
      */
-    private String createFilePath(String userId) {
+    private String createFilePath() {
         String fileTempPath = "upload/";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         String format = sdf.format(new Date());
-        return fileTempPath + "article" + "/" + userId + "/" + format + "/";
+        return fileTempPath + "article" + "/" + SecurityUtil.getCurrentUserId() + "/" + format + "/";
     }
 
     /**
@@ -278,19 +275,18 @@ public class CmsArticleController {
      * @param suffix suffix
      * @param inputStream 上传文件
      */
-    private String getArticleContent(String suffix, InputStream inputStream, String userId) throws ParserConfigurationException, TransformerException, IOException {
+    private String getArticleContent(String suffix, InputStream inputStream) throws ParserConfigurationException, TransformerException, IOException {
         String content = "";
         switch (suffix.toLowerCase()) {
-            case "md":
-                content = handleMd(inputStream);
-                break;
             case "doc":
-                content = handleDoc(inputStream, userId);
+                content = handleDoc(inputStream);
                 break;
             case "docx":
-                content = handleDocx(inputStream, userId);
+                content = handleDocx(inputStream);
                 break;
             default:
+                content = handleMd(inputStream);
+                break;
         }
         return content;
     }
@@ -308,10 +304,9 @@ public class CmsArticleController {
     /**
      * 处理 .doc 返回 html 字符
      * @param inputStream 上传文件
-     * @param userId 当前用户ID
      */
-    private String handleDoc(InputStream inputStream, String userId) throws IOException, ParserConfigurationException, TransformerException {
-        String imagePathStr = createFilePath(userId);
+    private String handleDoc(InputStream inputStream) throws IOException, ParserConfigurationException, TransformerException {
+        String imagePathStr = createFilePath();
 
         HWPFDocument wordDocument = new HWPFDocument(inputStream);
         WordToHtmlConverter wordToHtmlConverter = new WordToHtmlConverter(DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument());
@@ -353,11 +348,10 @@ public class CmsArticleController {
     /**
      * 处理 .docx 返回 html 字符
      * @param inputStream 上传文件
-     * @param userId 当前用户ID
      */
-    private String handleDocx(InputStream inputStream, String userId) throws IOException {
+    private String handleDocx(InputStream inputStream) throws IOException {
 
-        String imagePathStr = createFilePath(userId);
+        String imagePathStr = createFilePath();
 
         XWPFDocument document = new XWPFDocument(inputStream);
         XHTMLOptions options = XHTMLOptions.create();

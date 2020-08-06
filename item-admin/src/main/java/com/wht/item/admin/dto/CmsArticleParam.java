@@ -30,6 +30,12 @@ public class CmsArticleParam {
     @ApiModelProperty(value = "编辑器类型 markdownEditor tinymceEditor")
     private String editorType;
 
+    @ApiModelProperty(value = "文章类型 note blog")
+    private String articleType;
+
+    @ApiModelProperty(value = "文章内容是否变化")
+    private Boolean contentUpdate;
+
     @ApiModelProperty(value = "文章内容", required = true)
     @NotEmpty(message = "文章内容不能为空")
     private String content;

@@ -29,11 +29,17 @@ public class CmsArticle implements Serializable {
     @ApiModelProperty(value = "编辑器类型 markdownEditor tinymceEditor")
     private String editorType;
 
+    @ApiModelProperty(value = "文章类型 blog 博客文章 note 笔记")
+    private String articleType;
+
     @ApiModelProperty(value = "创建时间")
     private Date createdTime;
 
     @ApiModelProperty(value = "更新时间")
     private Date updatedTime;
+
+    @ApiModelProperty(value = "文章内容更新时间")
+    private Date updatedContentTime;
 
     @ApiModelProperty(value = "文章内容")
     private String content;
@@ -104,6 +110,14 @@ public class CmsArticle implements Serializable {
         this.editorType = editorType;
     }
 
+    public String getArticleType() {
+        return articleType;
+    }
+
+    public void setArticleType(String articleType) {
+        this.articleType = articleType;
+    }
+
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -118,6 +132,14 @@ public class CmsArticle implements Serializable {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public Date getUpdatedContentTime() {
+        return updatedContentTime;
+    }
+
+    public void setUpdatedContentTime(Date updatedContentTime) {
+        this.updatedContentTime = updatedContentTime;
     }
 
     public String getContent() {
@@ -142,8 +164,10 @@ public class CmsArticle implements Serializable {
         sb.append(", category=").append(category);
         sb.append(", status=").append(status);
         sb.append(", editorType=").append(editorType);
+        sb.append(", articleType=").append(articleType);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", updatedTime=").append(updatedTime);
+        sb.append(", updatedContentTime=").append(updatedContentTime);
         sb.append(", content=").append(content);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

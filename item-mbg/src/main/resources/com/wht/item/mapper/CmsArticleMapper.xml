@@ -10,8 +10,10 @@
     <result column="category" jdbcType="VARCHAR" property="category" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="editor_type" jdbcType="VARCHAR" property="editorType" />
+    <result column="article_type" jdbcType="VARCHAR" property="articleType" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="updated_content_time" jdbcType="TIMESTAMP" property="updatedContentTime" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.wht.item.model.CmsArticle">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
@@ -75,7 +77,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, title, author_id, hits, tags, category, status, editor_type, created_time, updated_time
+    id, title, author_id, hits, tags, category, status, editor_type, article_type, created_time, 
+    updated_time, updated_content_time
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -134,12 +137,14 @@
     </selectKey>
     insert into cms_article (title, author_id, hits, 
       tags, category, status, 
-      editor_type, created_time, updated_time, 
-      content)
+      editor_type, article_type, created_time, 
+      updated_time, updated_content_time, content
+      )
     values (#{title,jdbcType=VARCHAR}, #{authorId,jdbcType=BIGINT}, #{hits,jdbcType=INTEGER}, 
       #{tags,jdbcType=VARCHAR}, #{category,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
-      #{editorType,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
-      #{content,jdbcType=LONGVARCHAR})
+      #{editorType,jdbcType=VARCHAR}, #{articleType,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{updatedTime,jdbcType=TIMESTAMP}, #{updatedContentTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wht.item.model.CmsArticle">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -168,11 +173,17 @@
       <if test="editorType != null">
         editor_type,
       </if>
+      <if test="articleType != null">
+        article_type,
+      </if>
       <if test="createdTime != null">
         created_time,
       </if>
       <if test="updatedTime != null">
         updated_time,
+      </if>
+      <if test="updatedContentTime != null">
+        updated_content_time,
       </if>
       <if test="content != null">
         content,
@@ -200,11 +211,17 @@
       <if test="editorType != null">
         #{editorType,jdbcType=VARCHAR},
       </if>
+      <if test="articleType != null">
+        #{articleType,jdbcType=VARCHAR},
+      </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updatedTime != null">
         #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedContentTime != null">
+        #{updatedContentTime,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
@@ -244,11 +261,17 @@
       <if test="record.editorType != null">
         editor_type = #{record.editorType,jdbcType=VARCHAR},
       </if>
+      <if test="record.articleType != null">
+        article_type = #{record.articleType,jdbcType=VARCHAR},
+      </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updatedTime != null">
         updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedContentTime != null">
+        updated_content_time = #{record.updatedContentTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.content != null">
         content = #{record.content,jdbcType=LONGVARCHAR},
@@ -268,8 +291,10 @@
       category = #{record.category,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       editor_type = #{record.editorType,jdbcType=VARCHAR},
+      article_type = #{record.articleType,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      updated_content_time = #{record.updatedContentTime,jdbcType=TIMESTAMP},
       content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -285,8 +310,10 @@
       category = #{record.category,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       editor_type = #{record.editorType,jdbcType=VARCHAR},
+      article_type = #{record.articleType,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
+      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      updated_content_time = #{record.updatedContentTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -315,11 +342,17 @@
       <if test="editorType != null">
         editor_type = #{editorType,jdbcType=VARCHAR},
       </if>
+      <if test="articleType != null">
+        article_type = #{articleType,jdbcType=VARCHAR},
+      </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updatedTime != null">
         updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedContentTime != null">
+        updated_content_time = #{updatedContentTime,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},
@@ -336,8 +369,10 @@
       category = #{category,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       editor_type = #{editorType,jdbcType=VARCHAR},
+      article_type = #{articleType,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      updated_content_time = #{updatedContentTime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -350,8 +385,10 @@
       category = #{category,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       editor_type = #{editorType,jdbcType=VARCHAR},
+      article_type = #{articleType,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
-      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      updated_content_time = #{updatedContentTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

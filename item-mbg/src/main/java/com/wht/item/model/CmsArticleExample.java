@@ -635,6 +635,76 @@ public class CmsArticleExample {
             return (Criteria) this;
         }
 
+        public Criteria andArticleTypeIsNull() {
+            addCriterion("article_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleTypeIsNotNull() {
+            addCriterion("article_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleTypeEqualTo(String value) {
+            addCriterion("article_type =", value, "articleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleTypeNotEqualTo(String value) {
+            addCriterion("article_type <>", value, "articleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleTypeGreaterThan(String value) {
+            addCriterion("article_type >", value, "articleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("article_type >=", value, "articleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleTypeLessThan(String value) {
+            addCriterion("article_type <", value, "articleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleTypeLessThanOrEqualTo(String value) {
+            addCriterion("article_type <=", value, "articleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleTypeLike(String value) {
+            addCriterion("article_type like", value, "articleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleTypeNotLike(String value) {
+            addCriterion("article_type not like", value, "articleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleTypeIn(List<String> values) {
+            addCriterion("article_type in", values, "articleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleTypeNotIn(List<String> values) {
+            addCriterion("article_type not in", values, "articleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleTypeBetween(String value1, String value2) {
+            addCriterion("article_type between", value1, value2, "articleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleTypeNotBetween(String value1, String value2) {
+            addCriterion("article_type not between", value1, value2, "articleType");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedTimeIsNull() {
             addCriterion("created_time is null");
             return (Criteria) this;
@@ -752,6 +822,66 @@ public class CmsArticleExample {
 
         public Criteria andUpdatedTimeNotBetween(Date value1, Date value2) {
             addCriterion("updated_time not between", value1, value2, "updatedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeIsNull() {
+            addCriterion("updated_content_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeIsNotNull() {
+            addCriterion("updated_content_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeEqualTo(Date value) {
+            addCriterion("updated_content_time =", value, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeNotEqualTo(Date value) {
+            addCriterion("updated_content_time <>", value, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeGreaterThan(Date value) {
+            addCriterion("updated_content_time >", value, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("updated_content_time >=", value, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeLessThan(Date value) {
+            addCriterion("updated_content_time <", value, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeLessThanOrEqualTo(Date value) {
+            addCriterion("updated_content_time <=", value, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeIn(List<Date> values) {
+            addCriterion("updated_content_time in", values, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeNotIn(List<Date> values) {
+            addCriterion("updated_content_time not in", values, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeBetween(Date value1, Date value2) {
+            addCriterion("updated_content_time between", value1, value2, "updatedContentTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatedContentTimeNotBetween(Date value1, Date value2) {
+            addCriterion("updated_content_time not between", value1, value2, "updatedContentTime");
             return (Criteria) this;
         }
     }
