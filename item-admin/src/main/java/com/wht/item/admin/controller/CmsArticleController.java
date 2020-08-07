@@ -95,7 +95,7 @@ public class CmsArticleController {
     public CommonResult update(@PathVariable Long id, @RequestBody CmsArticleParam cmsArticleParam) {
         CmsArticle cmsArticle = new CmsArticle();
         BeanUtils.copyProperties(cmsArticleParam, cmsArticle);
-        if (cmsArticleParam.getContentUpdate()) {
+        if (cmsArticleParam.getContentUpdate() != null && cmsArticleParam.getContentUpdate()) {
             cmsArticle.setUpdatedContentTime(new Date());
         }
         cmsArticle.setId(id);
