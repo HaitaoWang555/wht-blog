@@ -6,10 +6,10 @@ import com.wht.item.admin.service.CmsArticleService;
 import com.wht.item.admin.service.CmsMetasService;
 import com.wht.item.admin.service.UmsAdminService;
 import com.wht.item.admin.util.SecurityUtil;
+import com.wht.item.admin.util.Util;
 import com.wht.item.common.api.CommonPage;
 import com.wht.item.common.api.CommonResult;
 import com.wht.item.model.CmsArticle;
-import com.wht.item.model.UmsAdmin;
 import fr.opensagres.poi.xwpf.converter.core.ImageManager;
 import fr.opensagres.poi.xwpf.converter.xhtml.XHTMLConverter;
 import fr.opensagres.poi.xwpf.converter.xhtml.XHTMLOptions;
@@ -62,8 +62,6 @@ import java.util.stream.Collectors;
 public class CmsArticleController {
     @Resource
     private CmsArticleService articleService;
-    @Resource
-    private UmsAdminService adminService;
     @Resource
     private CmsMetasService metasService;
 
@@ -147,7 +145,7 @@ public class CmsArticleController {
         if (file.isEmpty()) {
             return CommonResult.failed("文件为空");
         }
-        String realPath =  createFilePath();
+        String realPath =  Util.createFilePath("article");
         String thumbnail = "thumbnail/";
         File dir = new File(realPath);
         if(!dir.isDirectory()){
@@ -164,7 +162,7 @@ public class CmsArticleController {
         String thumbnailFilePath =thumbnailPath + fileName;
         try {
             file.transferTo(new File(localFilePath));
-            imgThumbnail(localFilePath, thumbnailFilePath);
+            Util.imgThumbnail(localFilePath, thumbnailFilePath);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
             return CommonResult.failed("文件上传失败");
@@ -183,7 +181,7 @@ public class CmsArticleController {
         InputStream inputStream = file.getInputStream();
         assert fileName != null;
         String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
-        String content = getArticleContent(suffix, inputStream);
+        String content = articleService.getArticleContent(suffix, inputStream);
         if (content.equals("")) {
             return CommonResult.failed("格式不正确");
         }
@@ -197,7 +195,7 @@ public class CmsArticleController {
             String fileName = file.getOriginalFilename();
             InputStream inputStream = file.getInputStream();
             String suffix = fileName.substring(fileName.indexOf(".") + 1);
-            String content = getArticleContent(suffix, inputStream);
+            String content = articleService.getArticleContent(suffix, inputStream);
             if (content.equals("")) break;
             String type;
             if (suffix.equals("md")) {
@@ -220,152 +218,4 @@ public class CmsArticleController {
         return CommonResult.success("导入成功");
     }
 
-
-    /**
-     * 创建上传文件路径
-     * @return upload - 模块 - 用户ID - 时间 - 文件名
-     */
-    private String createFilePath() {
-        String fileTempPath = "upload/";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String format = sdf.format(new Date());
-        return fileTempPath + "article" + "/" + SecurityUtil.getCurrentUserId() + "/" + format + "/";
-    }
-
-    /**
-     * 压缩图片
-     * @param localFilePath 原文件地址
-     * @param thumbnailFilePath 压缩文件地址
-     */
-    private void imgThumbnail(String localFilePath, String thumbnailFilePath) throws IOException {
-        Thumbnails.of(localFilePath)
-                .scale(1)
-                .outputQuality(0.5)
-                .outputFormat("jpg")
-                .toFile(thumbnailFilePath);
-    }
-    private void imgThumbnail(String path) throws IOException {
-        File file = new File(path);
-        String [] fileName = file.list();
-        if (fileName == null) return;
-        if (fileName.length == 0) return;
-        String thumbnailPath = path.concat("thumbnail/");
-        File thumbnailDir =  new File(thumbnailPath);
-        if(!thumbnailDir.isDirectory()){
-            thumbnailDir.mkdirs();
-        }
-        List<String> needThumbnailFileName = new ArrayList<>();
-        for (String f : fileName) {
-            String imagePath = path.concat(f);
-            needThumbnailFileName.add(imagePath);
-        }
-        String [] needThumbnailFileNames = new String[needThumbnailFileName.size()];
-        toThumbnail(thumbnailDir, needThumbnailFileName.toArray(needThumbnailFileNames));
-    }
-    private void toThumbnail(File filePath, String... files) throws IOException {
-        Thumbnails.of(files)
-                .scale(1)
-                .outputFormat("jpg")
-                .outputQuality(0.5)
-                .toFiles(filePath, Rename.NO_CHANGE);
-    }
-
-    /**
-     * 根据后缀 处理上传文件
-     * @param suffix suffix
-     * @param inputStream 上传文件
-     */
-    private String getArticleContent(String suffix, InputStream inputStream) throws ParserConfigurationException, TransformerException, IOException {
-        String content = "";
-        switch (suffix.toLowerCase()) {
-            case "doc":
-                content = handleDoc(inputStream);
-                break;
-            case "docx":
-                content = handleDocx(inputStream);
-                break;
-            default:
-                content = handleMd(inputStream);
-                break;
-        }
-        return content;
-    }
-
-    /**
-     * 处理 .md 返回 字符
-     * @param inputStream 上传文件
-     */
-    private String handleMd(InputStream inputStream) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        List<String> list = reader.lines().collect(Collectors.toList());
-        return Joiner.on("\n").join(list);
-    }
-
-    /**
-     * 处理 .doc 返回 html 字符
-     * @param inputStream 上传文件
-     */
-    private String handleDoc(InputStream inputStream) throws IOException, ParserConfigurationException, TransformerException {
-        String imagePathStr = createFilePath();
-
-        HWPFDocument wordDocument = new HWPFDocument(inputStream);
-        WordToHtmlConverter wordToHtmlConverter = new WordToHtmlConverter(DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument());
-        wordToHtmlConverter.setPicturesManager((a, b, suggestedName, d, e) -> imagePathStr + File.separator + suggestedName);
-        wordToHtmlConverter.processDocument(wordDocument);
-        List<Picture> pics = wordDocument.getPicturesTable().getAllPictures();
-
-        for (Picture pic : pics) {
-            File dir = new File(imagePathStr);
-            if(!dir.isDirectory()) dir.mkdirs();
-            pic.writeImageContent(new FileOutputStream(imagePathStr + pic.suggestFullFileName()));
-        }
-
-        Document htmlDocument = wordToHtmlConverter.getDocument();
-
-        DOMAnalyzer da = new DOMAnalyzer(htmlDocument);
-        da.attributesToStyles();
-        da.addStyleSheet(null, CSSNorm.stdStyleSheet(), DOMAnalyzer.Origin.AGENT);
-        da.addStyleSheet(null, CSSNorm.userStyleSheet(), DOMAnalyzer.Origin.AGENT);
-        da.getStyleSheets(); //load the author style sheets
-        da.stylesToDomInherited();
-
-        DOMSource domSource = new DOMSource(htmlDocument);
-        StringWriter stringWriter = new StringWriter();
-        Transformer transformer = TransformerFactory.newInstance()
-                .newTransformer();
-        transformer.setOutputProperty( OutputKeys.INDENT, "yes" );
-        transformer.setOutputProperty( OutputKeys.ENCODING, "utf-8" );
-        transformer.setOutputProperty( OutputKeys.METHOD, "html" );
-        transformer.transform(
-                domSource,
-                new StreamResult( stringWriter ) );
-
-        // 压缩图片
-        imgThumbnail(imagePathStr);
-
-        return stringWriter.toString();
-    }
-    /**
-     * 处理 .docx 返回 html 字符
-     * @param inputStream 上传文件
-     */
-    private String handleDocx(InputStream inputStream) throws IOException {
-
-        String imagePathStr = createFilePath();
-
-        XWPFDocument document = new XWPFDocument(inputStream);
-        XHTMLOptions options = XHTMLOptions.create();
-
-        // 存放图片的文件夹 html中图片的路径
-        options.setImageManager(new ImageManager( new File("./"),  "/" + imagePathStr ));
-        options.setIgnoreStylesIfUnused(false);
-        options.setFragment(true);
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        XHTMLConverter.getInstance().convert(document, byteArrayOutputStream, options);
-
-        // 压缩图片
-        imgThumbnail(imagePathStr);
-        return byteArrayOutputStream.toString();
-    }
 }

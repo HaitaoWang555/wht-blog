@@ -2,6 +2,10 @@ package com.wht.item.admin.service;
 
 import com.wht.item.model.CmsArticle;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -48,4 +52,5 @@ public interface CmsArticleService {
      */
     int delete(List<Long> ids);
 
+    String getArticleContent(String suffix, InputStream inputStream) throws ParserConfigurationException, TransformerException, IOException;
 }
