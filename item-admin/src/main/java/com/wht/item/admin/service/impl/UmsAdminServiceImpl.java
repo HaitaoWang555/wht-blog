@@ -15,17 +15,16 @@ import com.wht.item.common.util.Util;
 import com.wht.item.mapper.UmsAdminLoginLogMapper;
 import com.wht.item.mapper.UmsAdminMapper;
 import com.wht.item.mapper.UmsAdminRoleRelationMapper;
+import com.wht.item.mapper.UmsRoleMapper;
 import com.wht.item.model.*;
 import com.wht.item.security.util.JwtTokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -60,6 +59,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     private UmsAdminLoginLogMapper loginLogMapper;
     @Resource
     private UmsAdminRoleRelationMapper adminRoleRelationMapper;
+    @Resource
+    private UmsRoleMapper roleMapper;
 
     @Override
     public UmsAdmin getAdminByUsername(String username) {
@@ -209,9 +210,24 @@ public class UmsAdminServiceImpl implements UmsAdminService {
                 list.add(roleRelation);
             }
             adminRoleRelationDao.insertList(list);
+            updateRoleAdminCount(roleIds);
         }
         adminCacheService.delResourceList(adminId);
         return count;
+    }
+
+    private void updateRoleAdminCount(List<Long> roleIds) {
+        for (Long roleId : roleIds) {
+            // 查数量
+            UmsAdminRoleRelationExample adminRoleRelationExample = new UmsAdminRoleRelationExample();
+            adminRoleRelationExample.createCriteria().andRoleIdEqualTo(roleId);
+            List<UmsAdminRoleRelation> list = adminRoleRelationMapper.selectByExample(adminRoleRelationExample);
+            // 更新
+            UmsRole role = new UmsRole();
+            role.setId(roleId);
+            role.setAdminCount(list.size());
+            roleMapper.updateByPrimaryKeySelective(role);
+        }
     }
 
     @Override
