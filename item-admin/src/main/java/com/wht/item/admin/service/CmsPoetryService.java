@@ -1,6 +1,7 @@
 package com.wht.item.admin.service;
 
 import com.wht.item.admin.dto.CmsPoetryParam;
+import com.wht.item.common.api.CommonResult;
 import com.wht.item.model.CmsPoetry;
 
 import java.util.List;
@@ -26,6 +27,8 @@ public interface CmsPoetryService {
      */
     List<CmsPoetry> searchByIds(List<Integer> ids);
     List<CmsPoetry> listPoetryWithBLOBs(int pageNum, int pageSize);
+
+    CommonResult esSearch (String title, String dynasty, String author, String content, Integer pageNum, Integer pageSize);
 
     CmsPoetry getPoetry(int id);
 }

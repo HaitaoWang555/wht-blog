@@ -40,10 +40,6 @@ public class CmsPoetryController {
 
     @Resource
     private CmsPoetryService poetryService;
-    @Resource
-    private RestTemplate restTemplate;
-
-    private String HOST_ITEM_SEARCH = "http://localhost:8081/api/search";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CmsPoetryController.class);
 
@@ -71,22 +67,7 @@ public class CmsPoetryController {
             @RequestParam(value = "pageNum", defaultValue = "0") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "20") Integer pageSize
     ) {
-        pageNum = pageNum -1;
-
-        String url = HOST_ITEM_SEARCH + "/esPoetry/searchA" +
-                "?pageNum={pageNum}&pageSize={pageSize}&title={title}" +
-                "&dynasty={dynasty}&author={author}&content={content}";
-
-        Map<String, Object> uriVariables = new HashMap<>();
-        uriVariables.put("pageNum", pageNum);
-        uriVariables.put("pageSize", pageSize);
-        uriVariables.put("title", title);
-        uriVariables.put("dynasty", dynasty);
-        uriVariables.put("author", author);
-        uriVariables.put("content", content);
-
-        ResponseEntity<CommonResult> responseEntity = restTemplate.getForEntity(url, CommonResult.class, uriVariables);
-        return responseEntity.getBody();
+        return poetryService.esSearch(title, dynasty, author, content, pageNum, pageSize);
     }
 
     @ApiOperation(value = "根据ID获取诗词")
@@ -106,15 +87,9 @@ public class CmsPoetryController {
             return CommonResult.validateFailed(Objects.requireNonNull(result.getFieldError()).getDefaultMessage());
         }
         CommonResult commonResult;
-        int id = poetryService.createPoetry(cmsPoetryParam);
-        if (id != 0) {
+        int count = poetryService.createPoetry(cmsPoetryParam);
+        if (count > 0) {
             commonResult = CommonResult.success(null);
-            CmsPoetry poetry = new CmsPoetry();
-            BeanUtils.copyProperties(cmsPoetryParam, poetry);
-            poetry.setId(id);
-            LOGGER.info("createPoetry success:{}", poetry);
-            String url = HOST_ITEM_SEARCH + "/esPoetry/create";
-            restTemplate.postForEntity(url, poetry, CommonResult.class);
         } else {
             commonResult = CommonResult.failed("添加失败");
             LOGGER.error("createPoetry failed:{}", cmsPoetryParam);
@@ -136,11 +111,6 @@ public class CmsPoetryController {
         int count = poetryService.updatePoetry(id, cmsPoetryParam);
         if (count == 1) {
             commonResult = CommonResult.success(null);
-            LOGGER.info("updatePoetry success:{}", cmsPoetryParam);
-            String deleteUrl = HOST_ITEM_SEARCH + "/esPoetry/delete/" + id;
-            String addUrl = HOST_ITEM_SEARCH + "/esPoetry/create/" + id;
-            restTemplate.postForEntity(deleteUrl, id, CommonResult.class);
-            restTemplate.postForEntity(addUrl, id, CommonResult.class);
         } else {
             commonResult = CommonResult.failed("修改失败");
             LOGGER.error("updatePoetry failed:{}", cmsPoetryParam);
@@ -153,18 +123,7 @@ public class CmsPoetryController {
     public CommonResult delPoetry(@RequestParam("ids") List<Integer> ids) {
         int count = poetryService.deletePoetry(ids);
         if (count > 0) {
-            String url = HOST_ITEM_SEARCH + "/esPoetry/delete/batch?ids={ids}";
-            Map<String, Object> uriVariables = new HashMap<>();
-            StringBuilder idStr = new StringBuilder();
-            for (Integer id:ids) {
-                if (idStr.toString().equals("")) {
-                    idStr.append(id);
-                } else {
-                    idStr.append(",").append(id);
-                }
-            }
-            uriVariables.put("ids", idStr);
-            restTemplate.getForEntity(url, CommonResult.class, uriVariables);
+
             return CommonResult.success(count);
         }
         return CommonResult.failed();

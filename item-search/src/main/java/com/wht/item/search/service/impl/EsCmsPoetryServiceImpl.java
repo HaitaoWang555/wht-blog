@@ -4,6 +4,8 @@ import com.wht.item.search.dao.EsCmsPoetryDao;
 import com.wht.item.search.domain.EsCmsPoetry;
 import com.wht.item.search.repository.EsCmsPoetryRepository;
 import com.wht.item.search.service.EsCmsPoetryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,8 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
     private ElasticsearchTemplate elasticsearchTemplate;
     private static final String PERSON_INDEX_NAME = "pms";
     private static final String PERSON_INDEX_TYPE = "poetry";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EsCmsPoetryServiceImpl.class);
 
     @Override
     public int importAll() {
@@ -112,6 +116,13 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
     public Page<EsCmsPoetry> search(String title, String dynasty, String author, String content, Integer pageNum, Integer pageSize) {
         if (pageNum * pageSize > 10000) pageNum = 10000 / pageSize - 1;
         Pageable pageable = PageRequest.of(pageNum, pageSize);
+        if ("".equals(title)) title = null;
+        if ("".equals(dynasty)) dynasty = null;
+        if ("".equals(author)) author = null;
+        if ("".equals(content)) content = null;
+        if (title != null || dynasty != null || author != null || content != null) {
+            LOGGER.info("title {}, dynasty {}, author {}, content {}", title, dynasty, author, content);
+        }
         return esPoetryRepository.findByTitleOrDynastyOrAuthorOrContent(title, dynasty, author, content, pageable);
     }
 }
