@@ -25,7 +25,7 @@
         <where>
             and article_type = "blog"
             <if test="title!=null">
-                title like concat('%',#{title},'%')
+                and title like concat('%',#{title},'%')
             </if>
             <if test="authorId!=null">
                 and author_id = #{authorId,jdbcType=INTEGER}
