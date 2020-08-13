@@ -29,4 +29,8 @@ public interface ArticleService {
      * 获取所有已发布的文章
      */
     List<CmsArticle> getAllPublish();
+    /**
+     * 更新评论数量
+     */
+    void updateCmsArticleCommentCount(Long id);
 }

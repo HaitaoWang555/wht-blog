@@ -494,6 +494,76 @@ public class CmsCommentExample {
             addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
+
+        public Criteria andQuoteContentIsNull() {
+            addCriterion("quote_content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuoteContentIsNotNull() {
+            addCriterion("quote_content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuoteContentEqualTo(String value) {
+            addCriterion("quote_content =", value, "quoteContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuoteContentNotEqualTo(String value) {
+            addCriterion("quote_content <>", value, "quoteContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuoteContentGreaterThan(String value) {
+            addCriterion("quote_content >", value, "quoteContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuoteContentGreaterThanOrEqualTo(String value) {
+            addCriterion("quote_content >=", value, "quoteContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuoteContentLessThan(String value) {
+            addCriterion("quote_content <", value, "quoteContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuoteContentLessThanOrEqualTo(String value) {
+            addCriterion("quote_content <=", value, "quoteContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuoteContentLike(String value) {
+            addCriterion("quote_content like", value, "quoteContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuoteContentNotLike(String value) {
+            addCriterion("quote_content not like", value, "quoteContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuoteContentIn(List<String> values) {
+            addCriterion("quote_content in", values, "quoteContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuoteContentNotIn(List<String> values) {
+            addCriterion("quote_content not in", values, "quoteContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuoteContentBetween(String value1, String value2) {
+            addCriterion("quote_content between", value1, value2, "quoteContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuoteContentNotBetween(String value1, String value2) {
+            addCriterion("quote_content not between", value1, value2, "quoteContent");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

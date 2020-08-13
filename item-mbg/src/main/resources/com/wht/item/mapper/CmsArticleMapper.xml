@@ -6,6 +6,7 @@
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="author_id" jdbcType="BIGINT" property="authorId" />
     <result column="hits" jdbcType="INTEGER" property="hits" />
+    <result column="comment_count" jdbcType="INTEGER" property="commentCount" />
     <result column="tags" jdbcType="VARCHAR" property="tags" />
     <result column="category" jdbcType="VARCHAR" property="category" />
     <result column="status" jdbcType="VARCHAR" property="status" />
@@ -77,8 +78,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, title, author_id, hits, tags, category, status, editor_type, article_type, created_time, 
-    updated_time, updated_content_time
+    id, title, author_id, hits, comment_count, tags, category, status, editor_type, article_type, 
+    created_time, updated_time, updated_content_time
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -136,15 +137,15 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into cms_article (title, author_id, hits, 
-      tags, category, status, 
-      editor_type, article_type, created_time, 
-      updated_time, updated_content_time, content
-      )
+      comment_count, tags, category, 
+      status, editor_type, article_type, 
+      created_time, updated_time, updated_content_time, 
+      content)
     values (#{title,jdbcType=VARCHAR}, #{authorId,jdbcType=BIGINT}, #{hits,jdbcType=INTEGER}, 
-      #{tags,jdbcType=VARCHAR}, #{category,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
-      #{editorType,jdbcType=VARCHAR}, #{articleType,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{updatedTime,jdbcType=TIMESTAMP}, #{updatedContentTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
-      )
+      #{commentCount,jdbcType=INTEGER}, #{tags,jdbcType=VARCHAR}, #{category,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{editorType,jdbcType=VARCHAR}, #{articleType,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{updatedContentTime,jdbcType=TIMESTAMP}, 
+      #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wht.item.model.CmsArticle">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -160,6 +161,9 @@
       </if>
       <if test="hits != null">
         hits,
+      </if>
+      <if test="commentCount != null">
+        comment_count,
       </if>
       <if test="tags != null">
         tags,
@@ -198,6 +202,9 @@
       </if>
       <if test="hits != null">
         #{hits,jdbcType=INTEGER},
+      </if>
+      <if test="commentCount != null">
+        #{commentCount,jdbcType=INTEGER},
       </if>
       <if test="tags != null">
         #{tags,jdbcType=VARCHAR},
@@ -249,6 +256,9 @@
       <if test="record.hits != null">
         hits = #{record.hits,jdbcType=INTEGER},
       </if>
+      <if test="record.commentCount != null">
+        comment_count = #{record.commentCount,jdbcType=INTEGER},
+      </if>
       <if test="record.tags != null">
         tags = #{record.tags,jdbcType=VARCHAR},
       </if>
@@ -287,6 +297,7 @@
       title = #{record.title,jdbcType=VARCHAR},
       author_id = #{record.authorId,jdbcType=BIGINT},
       hits = #{record.hits,jdbcType=INTEGER},
+      comment_count = #{record.commentCount,jdbcType=INTEGER},
       tags = #{record.tags,jdbcType=VARCHAR},
       category = #{record.category,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
@@ -306,6 +317,7 @@
       title = #{record.title,jdbcType=VARCHAR},
       author_id = #{record.authorId,jdbcType=BIGINT},
       hits = #{record.hits,jdbcType=INTEGER},
+      comment_count = #{record.commentCount,jdbcType=INTEGER},
       tags = #{record.tags,jdbcType=VARCHAR},
       category = #{record.category,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
@@ -329,6 +341,9 @@
       </if>
       <if test="hits != null">
         hits = #{hits,jdbcType=INTEGER},
+      </if>
+      <if test="commentCount != null">
+        comment_count = #{commentCount,jdbcType=INTEGER},
       </if>
       <if test="tags != null">
         tags = #{tags,jdbcType=VARCHAR},
@@ -365,6 +380,7 @@
     set title = #{title,jdbcType=VARCHAR},
       author_id = #{authorId,jdbcType=BIGINT},
       hits = #{hits,jdbcType=INTEGER},
+      comment_count = #{commentCount,jdbcType=INTEGER},
       tags = #{tags,jdbcType=VARCHAR},
       category = #{category,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
@@ -381,6 +397,7 @@
     set title = #{title,jdbcType=VARCHAR},
       author_id = #{authorId,jdbcType=BIGINT},
       hits = #{hits,jdbcType=INTEGER},
+      comment_count = #{commentCount,jdbcType=INTEGER},
       tags = #{tags,jdbcType=VARCHAR},
       category = #{category,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},

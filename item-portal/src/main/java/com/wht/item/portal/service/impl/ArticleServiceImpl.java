@@ -54,6 +54,13 @@ public class ArticleServiceImpl implements ArticleService {
         return articleMapper.selectByExampleWithBLOBs(example);
     }
 
+    @Override
+    public void updateCmsArticleCommentCount(Long id) {
+        CmsArticle article = articleMapper.selectByPrimaryKey(id);
+        article.setCommentCount(article.getCommentCount() + 1);
+        articleMapper.updateByPrimaryKey(article);
+    }
+
     private void transformPreView(CmsArticle article) {
         String content = article.getContent();
         content =delHTMLTag(content);

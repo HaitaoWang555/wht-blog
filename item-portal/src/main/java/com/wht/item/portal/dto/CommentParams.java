@@ -21,6 +21,9 @@ public class CommentParams {
     @NotNull(message = "评论内容不能为空")
     private String content;
 
+    @ApiModelProperty(value = "引用的评论内容")
+    private String quoteContent;
+
     @ApiModelProperty(value = "个人网址")
     private String link;
 

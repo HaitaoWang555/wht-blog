@@ -22,6 +22,9 @@ public class CmsComment implements Serializable {
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
+    @ApiModelProperty(value = "引用的评论内容")
+    private String quoteContent;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -72,6 +75,14 @@ public class CmsComment implements Serializable {
         this.createTime = createTime;
     }
 
+    public String getQuoteContent() {
+        return quoteContent;
+    }
+
+    public void setQuoteContent(String quoteContent) {
+        this.quoteContent = quoteContent;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -84,6 +95,7 @@ public class CmsComment implements Serializable {
         sb.append(", content=").append(content);
         sb.append(", link=").append(link);
         sb.append(", createTime=").append(createTime);
+        sb.append(", quoteContent=").append(quoteContent);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -17,6 +17,9 @@ public class CmsArticle implements Serializable {
     @ApiModelProperty(value = "文章点击量")
     private Integer hits;
 
+    @ApiModelProperty(value = "文章评论数量")
+    private Integer commentCount;
+
     @ApiModelProperty(value = "文章标签")
     private String tags;
 
@@ -76,6 +79,14 @@ public class CmsArticle implements Serializable {
 
     public void setHits(Integer hits) {
         this.hits = hits;
+    }
+
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
     }
 
     public String getTags() {
@@ -160,6 +171,7 @@ public class CmsArticle implements Serializable {
         sb.append(", title=").append(title);
         sb.append(", authorId=").append(authorId);
         sb.append(", hits=").append(hits);
+        sb.append(", commentCount=").append(commentCount);
         sb.append(", tags=").append(tags);
         sb.append(", category=").append(category);
         sb.append(", status=").append(status);

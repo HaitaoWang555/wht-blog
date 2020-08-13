@@ -44,5 +44,4 @@ public class CommentController {
             return CommonResult.failed("添加失败");
         }
     }
-    // TODO: 更新评论数量
 }
