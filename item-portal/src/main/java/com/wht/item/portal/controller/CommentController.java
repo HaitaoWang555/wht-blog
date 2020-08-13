@@ -37,13 +37,12 @@ public class CommentController {
         if(result.hasErrors()){
             return CommonResult.validateFailed(Objects.requireNonNull(result.getFieldError()).getDefaultMessage());
         }
-        CommonResult commonResult;
-        int count = commentService.createComment(commentParams);
-        if (count > 0) {
-            commonResult = CommonResult.success(null);
+        Long id = commentService.createComment(commentParams);
+        if (id != null) {
+            return CommonResult.success(id);
         } else {
-            commonResult = CommonResult.failed("添加失败");
+            return CommonResult.failed("添加失败");
         }
-        return commonResult;
     }
+    // TODO: 更新评论数量
 }

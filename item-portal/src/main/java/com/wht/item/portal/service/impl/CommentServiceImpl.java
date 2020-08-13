@@ -24,9 +24,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public int createComment(CommentParams commentParams) {
+    public Long createComment(CommentParams commentParams) {
         CmsComment cmsComment = new CmsComment();
         BeanUtils.copyProperties(commentParams, cmsComment);
-        return commentMapper.insertSelective(cmsComment);
+        commentMapper.insertSelective(cmsComment);
+        return cmsComment.getId();
     }
 }

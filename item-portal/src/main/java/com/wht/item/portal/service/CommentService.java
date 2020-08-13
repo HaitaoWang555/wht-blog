@@ -9,5 +9,5 @@ public interface CommentService {
 
     List<CmsComment> list(long id);
 
-    int createComment(CommentParams commentParams);
+    Long createComment(CommentParams commentParams);
 }
