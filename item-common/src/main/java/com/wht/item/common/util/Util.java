@@ -29,10 +29,13 @@ public class Util {
      */
     public static String getIp() {
         String unknown = "unknown";
-        // nginx反向代理IP
-        String ip = getRequest().getHeader("X-Real-IP");
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = getRequest().getHeader("x-forwarded-for");
+
+        String ip = getRequest().getHeader("x-forwarded-for");
+        if (ip != null && ip.length() != 0 && !unknown.equalsIgnoreCase(ip)) {
+            // 多次反向代理后会有多个ip值，第一个ip才是真实ip
+            if (ip.indexOf(",") != -1) {
+                ip = ip.split(",")[0];
+            }
         }
         if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
             ip = getRequest().getHeader("Proxy-Client-IP");
@@ -41,9 +44,19 @@ public class Util {
             ip = getRequest().getHeader("WL-Proxy-Client-IP");
         }
         if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
+            ip = getRequest().getHeader("HTTP_CLIENT_IP");
+        }
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
+            ip = getRequest().getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
+            ip = getRequest().getHeader("X-Real-IP");
+        }
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
             ip = getRequest().getRemoteAddr();
         }
         return ip;
+
     }
 
     public static String getUserAgent() {

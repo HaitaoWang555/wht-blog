@@ -1,5 +1,6 @@
 package com.wht.item.portal.service.impl;
 
+import com.wht.item.common.util.Util;
 import com.wht.item.mapper.CmsCommentMapper;
 import com.wht.item.model.CmsComment;
 import com.wht.item.model.CmsCommentExample;
@@ -30,6 +31,7 @@ public class CommentServiceImpl implements CommentService {
     public Long createComment(CommentParams commentParams) {
         CmsComment cmsComment = new CmsComment();
         BeanUtils.copyProperties(commentParams, cmsComment);
+        cmsComment.setIp(Util.getIp());
         int count = commentMapper.insertSelective(cmsComment);
         if (count > 0) articleService.updateCmsArticleCommentCount(cmsComment.getArticleId());
         return cmsComment.getId();
