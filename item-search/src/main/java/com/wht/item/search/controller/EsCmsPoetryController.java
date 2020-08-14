@@ -24,28 +24,28 @@ public class EsCmsPoetryController {
     @Resource
     private EsCmsPoetryService esPoetryService;
 
-    @ApiOperation(value = "导入所有数据库中商品到ES")
+    @ApiOperation(value = "导入所有数据库中诗词到ES")
     @PostMapping("/importAll")
     public CommonResult<Integer> importAllList() {
         int count = esPoetryService.importAll();
         return CommonResult.success(count);
     }
 
-    @ApiOperation(value = "根据id删除商品")
+    @ApiOperation(value = "根据id删除诗词")
     @PostMapping("/delete/{id}")
     public CommonResult<Object> delete(@PathVariable Long id) {
         esPoetryService.delete(id);
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "根据id批量删除商品")
+    @ApiOperation(value = "根据id批量删除诗词")
     @GetMapping("/delete/batch")
     public CommonResult<Object> delete(@RequestParam("ids") List<Long> ids) {
         esPoetryService.delete(ids);
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "根据id创建商品")
+    @ApiOperation(value = "根据id创建诗词")
     @PostMapping("/create/{id}")
     public CommonResult<EsCmsPoetry> create(@PathVariable Long id) {
         EsCmsPoetry esPoetry = esPoetryService.create(id);
@@ -56,7 +56,7 @@ public class EsCmsPoetryController {
         }
     }
 
-    @ApiOperation(value = "根据EsCmsPoetry创建商品")
+    @ApiOperation(value = "根据EsCmsPoetry创建诗词")
     @PostMapping("/create")
     public CommonResult<EsCmsPoetry> create(
             @RequestBody EsCmsPoetry esCmsPoetry

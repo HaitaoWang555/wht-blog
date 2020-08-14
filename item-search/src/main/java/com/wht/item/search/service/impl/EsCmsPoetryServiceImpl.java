@@ -123,6 +123,6 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
         if (title != null || dynasty != null || author != null || content != null) {
             LOGGER.info("title {}, dynasty {}, author {}, content {}", title, dynasty, author, content);
         }
-        return esPoetryRepository.findByTitleOrDynastyOrAuthorOrContent(title, dynasty, author, content, pageable);
+        return esPoetryRepository.findByTitleAndDynastyAndAuthorAndContent(title, dynasty, author, content, pageable);
     }
 }
