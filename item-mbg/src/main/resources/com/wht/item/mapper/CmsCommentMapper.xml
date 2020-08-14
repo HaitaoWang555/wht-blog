@@ -9,6 +9,7 @@
     <result column="link" jdbcType="VARCHAR" property="link" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="quote_content" jdbcType="VARCHAR" property="quoteContent" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, article_id, content, link, create_time, quote_content
+    id, username, article_id, content, link, create_time, quote_content, ip
   </sql>
   <select id="selectByExample" parameterType="com.wht.item.model.CmsCommentExample" resultMap="BaseResultMap">
     select
@@ -106,11 +107,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into cms_comment (username, article_id, content, 
-      link, create_time, quote_content
-      )
+      link, create_time, quote_content, 
+      ip)
     values (#{username,jdbcType=VARCHAR}, #{articleId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, 
-      #{link,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{quoteContent,jdbcType=VARCHAR}
-      )
+      #{link,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{quoteContent,jdbcType=VARCHAR}, 
+      #{ip,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wht.item.model.CmsComment">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -136,6 +137,9 @@
       <if test="quoteContent != null">
         quote_content,
       </if>
+      <if test="ip != null">
+        ip,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="username != null">
@@ -155,6 +159,9 @@
       </if>
       <if test="quoteContent != null">
         #{quoteContent,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -188,6 +195,9 @@
       <if test="record.quoteContent != null">
         quote_content = #{record.quoteContent,jdbcType=VARCHAR},
       </if>
+      <if test="record.ip != null">
+        ip = #{record.ip,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -201,7 +211,8 @@
       content = #{record.content,jdbcType=VARCHAR},
       link = #{record.link,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      quote_content = #{record.quoteContent,jdbcType=VARCHAR}
+      quote_content = #{record.quoteContent,jdbcType=VARCHAR},
+      ip = #{record.ip,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -227,6 +238,9 @@
       <if test="quoteContent != null">
         quote_content = #{quoteContent,jdbcType=VARCHAR},
       </if>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -237,7 +251,8 @@
       content = #{content,jdbcType=VARCHAR},
       link = #{link,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      quote_content = #{quoteContent,jdbcType=VARCHAR}
+      quote_content = #{quoteContent,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

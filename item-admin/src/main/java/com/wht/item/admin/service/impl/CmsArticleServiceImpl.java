@@ -106,6 +106,16 @@ public class CmsArticleServiceImpl implements CmsArticleService {
         return articleMapper.deleteByExample(example);
     }
 
+    /**
+     * 更新文章评论数
+     * @param id 文章ID
+     */
+    public void updateCmsArticleCommentCount(Long id, int count) {
+        CmsArticle article = articleMapper.selectByPrimaryKey(id);
+        article.setCommentCount(article.getCommentCount() - count);
+        articleMapper.updateByPrimaryKey(article);
+    }
+
     private CmsArticleExample example() {
         CmsArticleExample example = new CmsArticleExample();
         example.createCriteria().andArticleTypeEqualTo("blog");
