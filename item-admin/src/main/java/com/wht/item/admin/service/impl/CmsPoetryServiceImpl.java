@@ -170,9 +170,9 @@ public class CmsPoetryServiceImpl implements CmsPoetryService {
         PageHelper.startPage(pageNum, pageSize, false);
         CmsPoetryExample example = new  CmsPoetryExample();
         CmsPoetryExample.Criteria criteria = example.createCriteria();
-        if (!StringUtils.isEmpty(title)) criteria.andTitleLike(title);
-        if (!StringUtils.isEmpty(dynasty)) criteria.andTitleLike(dynasty);
-        if (!StringUtils.isEmpty(author)) criteria.andTitleLike(author);
+        if (!StringUtils.isEmpty(title)) criteria.andTitleLike('%' + title + '%');
+        if (!StringUtils.isEmpty(dynasty)) criteria.andDynastyLike('%' + dynasty + '%');
+        if (!StringUtils.isEmpty(author)) criteria.andAuthorLike('%' + author + '%');
         return poetryMapper.selectByExampleWithBLOBs(example);
     }
 
