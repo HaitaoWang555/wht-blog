@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wht.item.admin.dao.CmsCommentDao">
+    <resultMap id="BaseResultMap" type="com.wht.item.model.CmsComment">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="article_id" jdbcType="BIGINT" property="articleId" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="link" jdbcType="VARCHAR" property="link" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="quote_content" jdbcType="VARCHAR" property="quoteContent" />
+        <result column="ip" jdbcType="VARCHAR" property="ip" />
+        <result column="user_agent" jdbcType="VARCHAR" property="userAgent" />
+    </resultMap>
+    <update id="updateBatch" parameterType="java.util.List" >
+        update cms_comment
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="link =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.link!=null">
+                        when id=#{i.id} then #{i.link}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="list" separator="or" item="i" index="index" >
+            id=#{i.id}
+        </foreach>
+    </update>
+</mapper>

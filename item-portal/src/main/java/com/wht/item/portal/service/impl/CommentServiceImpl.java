@@ -32,6 +32,7 @@ public class CommentServiceImpl implements CommentService {
         CmsComment cmsComment = new CmsComment();
         BeanUtils.copyProperties(commentParams, cmsComment);
         cmsComment.setIp(Util.getIp());
+        cmsComment.setUserAgent(Util.getUserAgent());
         int count = commentMapper.insertSelective(cmsComment);
         if (count > 0) articleService.updateCmsArticleCommentCount(cmsComment.getArticleId());
         return cmsComment.getId();

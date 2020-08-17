@@ -1,6 +1,7 @@
 package com.wht.item.admin.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.wht.item.admin.dao.CmsCommentDao;
 import com.wht.item.admin.service.CmsCommentService;
 import com.wht.item.mapper.CmsCommentMapper;
 import com.wht.item.model.CmsComment;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,8 @@ import java.util.Map;
 public class CmsCommentServiceImpl implements CmsCommentService {
     @Resource
     private CmsCommentMapper commentMapper;
+    @Resource
+    private CmsCommentDao commentDao;
     @Resource
     private CmsArticleServiceImpl articleService;
 
@@ -40,13 +44,26 @@ public class CmsCommentServiceImpl implements CmsCommentService {
     }
 
     @Override
-    public List<CmsComment> listPoetry(String username, Long articleId, String ip, int pageNum, int pageSize, String sortBy) {
+    public List<CmsComment> listComment(String username, Long articleId, String ip, String link, int pageNum, int pageSize, String sortBy) {
         PageHelper.startPage(pageNum, pageSize, sortBy);
         CmsCommentExample example = new  CmsCommentExample();
         CmsCommentExample.Criteria criteria = example.createCriteria();
         if (!StringUtils.isEmpty(username)) criteria.andUsernameLike('%' + username + '%');
         if (articleId != null) criteria.andArticleIdEqualTo(articleId);
         if (!StringUtils.isEmpty(ip)) criteria.andIpLike( '%' + ip + '%');
+        if (!StringUtils.isEmpty(link)) criteria.andLinkLike( '%' + link + '%');
         return commentMapper.selectByExample(example);
+    }
+
+    @Override
+    public int updateCommentLink(List<Long> ids) {
+        List<CmsComment> commentList  = new ArrayList<>();
+        for (Long id : ids) {
+            CmsComment comment = new CmsComment();
+            comment.setId(id);
+            comment.setLink("");
+            commentList.add(comment);
+        }
+        return commentDao.updateBatch(commentList);
     }
 }

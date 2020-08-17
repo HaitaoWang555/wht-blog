@@ -7,26 +7,22 @@ import java.util.Date;
 public class CmsComment implements Serializable {
     private Long id;
 
-    @ApiModelProperty(value = "用户名")
     private String username;
 
-    @ApiModelProperty(value = "文章ID")
     private Long articleId;
 
-    @ApiModelProperty(value = "评论内容")
     private String content;
 
-    @ApiModelProperty(value = "个人网址")
     private String link;
 
-    @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "引用的评论内容")
     private String quoteContent;
 
     @ApiModelProperty(value = "ip地址")
     private String ip;
+
+    private String userAgent;
 
     private static final long serialVersionUID = 1L;
 
@@ -94,6 +90,14 @@ public class CmsComment implements Serializable {
         this.ip = ip;
     }
 
+    public String getUserAgent() {
+        return userAgent;
+    }
+
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -108,6 +112,7 @@ public class CmsComment implements Serializable {
         sb.append(", createTime=").append(createTime);
         sb.append(", quoteContent=").append(quoteContent);
         sb.append(", ip=").append(ip);
+        sb.append(", userAgent=").append(userAgent);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

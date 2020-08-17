@@ -634,6 +634,76 @@ public class CmsCommentExample {
             addCriterion("ip not between", value1, value2, "ip");
             return (Criteria) this;
         }
+
+        public Criteria andUserAgentIsNull() {
+            addCriterion("user_agent is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAgentIsNotNull() {
+            addCriterion("user_agent is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAgentEqualTo(String value) {
+            addCriterion("user_agent =", value, "userAgent");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAgentNotEqualTo(String value) {
+            addCriterion("user_agent <>", value, "userAgent");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAgentGreaterThan(String value) {
+            addCriterion("user_agent >", value, "userAgent");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAgentGreaterThanOrEqualTo(String value) {
+            addCriterion("user_agent >=", value, "userAgent");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAgentLessThan(String value) {
+            addCriterion("user_agent <", value, "userAgent");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAgentLessThanOrEqualTo(String value) {
+            addCriterion("user_agent <=", value, "userAgent");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAgentLike(String value) {
+            addCriterion("user_agent like", value, "userAgent");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAgentNotLike(String value) {
+            addCriterion("user_agent not like", value, "userAgent");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAgentIn(List<String> values) {
+            addCriterion("user_agent in", values, "userAgent");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAgentNotIn(List<String> values) {
+            addCriterion("user_agent not in", values, "userAgent");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAgentBetween(String value1, String value2) {
+            addCriterion("user_agent between", value1, value2, "userAgent");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAgentNotBetween(String value1, String value2) {
+            addCriterion("user_agent not between", value1, value2, "userAgent");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
