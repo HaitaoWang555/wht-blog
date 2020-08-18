@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.google.common.base.Joiner;
 import com.wht.item.admin.dao.CmsArticleDao;
 import com.wht.item.admin.service.CmsArticleService;
+import com.wht.item.admin.service.CmsCommentService;
 import com.wht.item.admin.service.CmsNoteService;
 import com.wht.item.admin.util.Util;
 import com.wht.item.mapper.CmsArticleMapper;
@@ -52,6 +53,8 @@ public class CmsArticleServiceImpl implements CmsArticleService {
     private CmsArticleDao articleDao;
     @Resource
     private CmsNoteService noteService;
+    @Resource
+    private CmsCommentService commentService;
 
     @Override
     public List<CmsArticle> listAll() {
@@ -103,7 +106,9 @@ public class CmsArticleServiceImpl implements CmsArticleService {
     public int delete(List<Long> ids) {
         CmsArticleExample example = new CmsArticleExample();
         example.createCriteria().andIdIn(ids);
-        return articleMapper.deleteByExample(example);
+        int count = articleMapper.deleteByExample(example);
+        if (count > 0) commentService.deleteCommentByAids(ids);
+        return count;
     }
 
     /**

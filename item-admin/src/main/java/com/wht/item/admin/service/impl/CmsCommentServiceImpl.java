@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class CmsCommentServiceImpl implements CmsCommentService {
@@ -25,12 +26,17 @@ public class CmsCommentServiceImpl implements CmsCommentService {
     private CmsArticleServiceImpl articleService;
 
     @Override
-    public int deletePoetry(List<Long> ids, List<Long> aids) {
+    public int deleteComment(List<Long> ids, List<Long> aids) {
         CmsCommentExample example = new CmsCommentExample();
         example.createCriteria().andIdIn(ids);
         int count  = commentMapper.deleteByExample(example);
         if (count > 0) delArticleCommentCount(aids);
         return count;
+    }
+    private int deleteComment(List<Long> ids) {
+        CmsCommentExample example = new CmsCommentExample();
+        example.createCriteria().andIdIn(ids);
+        return commentMapper.deleteByExample(example);
     }
 
     private void delArticleCommentCount(List<Long> aids) {
@@ -65,5 +71,15 @@ public class CmsCommentServiceImpl implements CmsCommentService {
             commentList.add(comment);
         }
         return commentDao.updateBatch(commentList);
+    }
+
+    @Override
+    public int deleteCommentByAids(List<Long> aids) {
+        CmsCommentExample example = new  CmsCommentExample();
+        CmsCommentExample.Criteria criteria = example.createCriteria();
+        criteria.andArticleIdIn(aids);
+        List<CmsComment> commentList = commentMapper.selectByExample(example);
+        List<Long> ids = commentList.stream().map(CmsComment::getId).collect(Collectors.toList());
+        return deleteComment(ids);
     }
 }

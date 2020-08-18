@@ -37,7 +37,7 @@ public class CmsCommentController {
     @ApiOperation(value = "根据ID批量删除评论")
     @PostMapping("/delete")
     public CommonResult delComment(@RequestParam("ids") List<Long> ids, @RequestParam("aids") List<Long> aids) {
-        int count = commentService.deletePoetry(ids, aids);
+        int count = commentService.deleteComment(ids, aids);
         if (count > 0) {
             return CommonResult.success(count);
         }

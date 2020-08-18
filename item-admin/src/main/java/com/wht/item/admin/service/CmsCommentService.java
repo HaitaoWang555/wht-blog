@@ -8,7 +8,11 @@ public interface CmsCommentService {
     /**
      * 批量删除
      */
-    int deletePoetry(List<Long> ids, List<Long> aids);
+    int deleteComment(List<Long> ids, List<Long> aids);
+    /**
+     * 通过文章ID批量删除
+     */
+    int deleteCommentByAids(List<Long> aids);
 
     List<CmsComment> listComment(String username, Long articleId, String ip, String link, int pageNum, int pageSize, String sortBy);
     /**
