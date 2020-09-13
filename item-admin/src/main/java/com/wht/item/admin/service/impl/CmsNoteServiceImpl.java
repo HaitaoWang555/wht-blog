@@ -399,7 +399,8 @@ public class CmsNoteServiceImpl implements CmsNoteService {
     }
 
     private String getNoteFilePath() {
-        return "upload/notes/" + SecurityUtil.getCurrentUserId() + "/";
+//        return "upload/notes/" + SecurityUtil.getCurrentUserId() + "/";
+        return "upload/notes/1/";
     }
 
     /**
