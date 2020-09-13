@@ -49,6 +49,7 @@ public class CmsNoteServiceImpl implements CmsNoteService {
         if(cmsNote.getParentId() == null) {
             cmsNote.setParentId(0L);
         }
+        cmsNote.setAuthorId(SecurityUtil.getCurrentUserId());
         //查询同一层级是否有相同的名称
         CmsNoteExample example = new CmsNoteExample();
         example.createCriteria()
@@ -399,8 +400,7 @@ public class CmsNoteServiceImpl implements CmsNoteService {
     }
 
     private String getNoteFilePath() {
-//        return "upload/notes/" + SecurityUtil.getCurrentUserId() + "/";
-        return "upload/notes/1/";
+        return "upload/notes/";
     }
 
     /**

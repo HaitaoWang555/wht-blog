@@ -19,6 +19,9 @@ public class CmsNote implements Serializable {
     @ApiModelProperty(value = "对应的文章id")
     private Long articleId;
 
+    @ApiModelProperty(value = "笔记作者ID")
+    private Long authorId;
+
     @ApiModelProperty(value = "创建时间")
     private Date createdTime;
 
@@ -67,6 +70,14 @@ public class CmsNote implements Serializable {
         this.articleId = articleId;
     }
 
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
+
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -94,6 +105,7 @@ public class CmsNote implements Serializable {
         sb.append(", parentId=").append(parentId);
         sb.append(", menuType=").append(menuType);
         sb.append(", articleId=").append(articleId);
+        sb.append(", authorId=").append(authorId);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", updatedTime=").append(updatedTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);

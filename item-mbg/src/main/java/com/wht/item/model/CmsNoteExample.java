@@ -425,6 +425,66 @@ public class CmsNoteExample {
             return (Criteria) this;
         }
 
+        public Criteria andAuthorIdIsNull() {
+            addCriterion("author_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthorIdIsNotNull() {
+            addCriterion("author_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthorIdEqualTo(Long value) {
+            addCriterion("author_id =", value, "authorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthorIdNotEqualTo(Long value) {
+            addCriterion("author_id <>", value, "authorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthorIdGreaterThan(Long value) {
+            addCriterion("author_id >", value, "authorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthorIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("author_id >=", value, "authorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthorIdLessThan(Long value) {
+            addCriterion("author_id <", value, "authorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthorIdLessThanOrEqualTo(Long value) {
+            addCriterion("author_id <=", value, "authorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthorIdIn(List<Long> values) {
+            addCriterion("author_id in", values, "authorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthorIdNotIn(List<Long> values) {
+            addCriterion("author_id not in", values, "authorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthorIdBetween(Long value1, Long value2) {
+            addCriterion("author_id between", value1, value2, "authorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthorIdNotBetween(Long value1, Long value2) {
+            addCriterion("author_id not between", value1, value2, "authorId");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedTimeIsNull() {
             addCriterion("created_time is null");
             return (Criteria) this;
