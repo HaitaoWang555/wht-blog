@@ -109,7 +109,7 @@ CREATE TABLE `cms_note` (
   `article_id` bigint DEFAULT NULL COMMENT '对应的文章id',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `author_id` bigint DEFAULT '0' COMMENT '文章作者ID',
+  `author_id` bigint DEFAULT NULL COMMENT '文章作者ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=611 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
