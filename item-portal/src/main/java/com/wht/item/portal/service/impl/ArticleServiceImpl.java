@@ -43,7 +43,10 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void updateCmsArticleHits(CmsArticle article) {
         // TODO 锁
-        articleMapper.updateByPrimaryKey(article);
+        CmsArticle updateArticle = new CmsArticle();
+        updateArticle.setId(article.getId());
+        updateArticle.setHits(article.getHits());
+        articleMapper.updateByPrimaryKeySelective(updateArticle);
     }
 
     @Override

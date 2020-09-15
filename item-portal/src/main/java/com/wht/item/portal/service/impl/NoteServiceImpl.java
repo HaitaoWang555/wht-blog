@@ -28,8 +28,6 @@ import java.util.List;
 public class NoteServiceImpl implements NoteService {
     @Resource
     private CmsNoteMapper noteMapper;
-    @Resource
-    private CmsArticleMapper articleMapper;
     
     @Override
     public List<NoteNode> treeList() {
@@ -39,11 +37,6 @@ public class NoteServiceImpl implements NoteService {
             noteNodeList.add(toNode(note));
         }
         return listToTree(noteNodeList);
-    }
-
-    @Override
-    public CmsArticle getContent(Long id) {
-        return articleMapper.selectByPrimaryKey(id);
     }
 
     private List<CmsNote> listAll() {

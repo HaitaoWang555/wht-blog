@@ -4,6 +4,7 @@ import com.wht.item.common.api.CommonPage;
 import com.wht.item.common.api.CommonResult;
 import com.wht.item.model.CmsArticle;
 import com.wht.item.portal.dto.NoteNode;
+import com.wht.item.portal.service.ArticleService;
 import com.wht.item.portal.service.NoteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +29,8 @@ public class NoteController {
 
     @Resource
     private NoteService noteService;
+    @Resource
+    private ArticleService articleService;
 
     @ApiOperation("树形笔记列表")
     @GetMapping("/treeList")
@@ -39,8 +42,11 @@ public class NoteController {
     @ApiOperation("根据文章ID获取")
     @GetMapping("/content/{id}")
     public CommonResult<CmsArticle> getItem(@PathVariable Long id) {
-        CmsArticle cmsArticle = noteService.getContent(id);
+        CmsArticle cmsArticle = articleService.getItem(id);
         if (cmsArticle != null) {
+            Integer hits = cmsArticle.getHits() + 1;
+            cmsArticle.setHits(hits);
+            articleService.updateCmsArticleHits(cmsArticle);
             return CommonResult.success(cmsArticle);
         } else {
             return CommonResult.failed("文章不存在");
