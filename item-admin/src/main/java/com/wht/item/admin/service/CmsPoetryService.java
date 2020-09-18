@@ -4,6 +4,7 @@ import com.wht.item.admin.dto.CmsPoetryParam;
 import com.wht.item.common.api.CommonResult;
 import com.wht.item.model.CmsPoetry;
 
+import java.io.InputStream;
 import java.util.List;
 
 public interface CmsPoetryService {
@@ -31,4 +32,6 @@ public interface CmsPoetryService {
     CommonResult esSearch (String title, String dynasty, String author, String content, Integer pageNum, Integer pageSize);
 
     CmsPoetry getPoetry(int id);
+
+    int uploadCsv(InputStream inputStream);
 }

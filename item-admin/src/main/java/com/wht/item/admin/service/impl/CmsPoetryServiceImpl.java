@@ -1,7 +1,10 @@
 package com.wht.item.admin.service.impl;
 
+import cn.hutool.core.text.csv.CsvReader;
+import cn.hutool.core.text.csv.CsvUtil;
 import com.github.pagehelper.PageHelper;
 import com.wht.item.admin.controller.CmsPoetryController;
+import com.wht.item.admin.dao.CmsPoetryDao;
 import com.wht.item.admin.dto.CmsPoetryParam;
 import com.wht.item.admin.service.CmsPoetryService;
 import com.wht.item.common.api.CommonPage;
@@ -11,6 +14,7 @@ import com.wht.item.common.exception.ApiException;
 import com.wht.item.mapper.CmsPoetryMapper;
 import com.wht.item.model.CmsPoetry;
 import com.wht.item.model.CmsPoetryExample;
+import org.apache.commons.collections4.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -18,8 +22,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +39,8 @@ import java.util.stream.Collectors;
 public class CmsPoetryServiceImpl implements CmsPoetryService {
     @Resource
     private CmsPoetryMapper poetryMapper;
+    @Resource
+    private CmsPoetryDao poetryDao;
     @Resource
     private RestTemplate restTemplate;
 
@@ -121,6 +132,23 @@ public class CmsPoetryServiceImpl implements CmsPoetryService {
     @Override
     public CmsPoetry getPoetry(int id) {
         return poetryMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public int uploadCsv(InputStream inputStream) {
+        BufferedReader BufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        CsvReader reader = CsvUtil.getReader();
+        long a = System.currentTimeMillis();
+        List<CmsPoetryParam> result = reader.read(
+                BufferedReader, CmsPoetryParam.class);
+        List<List<CmsPoetryParam>> poetryList = ListUtils.partition(result, 3000);
+//        for (List<CmsPoetryParam> list : poetryList) {
+//            poetryDao.insertList(list);
+//        }
+        for (CmsPoetryParam poetry : result) {
+            createPoetry(poetry);
+        }
+        return 0;
     }
 
     @Override
