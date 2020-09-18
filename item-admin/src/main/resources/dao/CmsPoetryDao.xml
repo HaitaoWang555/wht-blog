@@ -52,7 +52,7 @@
             (#{item.title,jdbcType=VARCHAR},
             #{item.dynasty,jdbcType=VARCHAR},
             #{item.author,jdbcType=VARCHAR},
-            #{item.content,jdbcType=LONGVARCHAR},)
+            #{item.content,jdbcType=LONGVARCHAR})
         </foreach>
     </insert>
 </mapper>
