@@ -1,9 +1,6 @@
 package com.wht.item.admin.service.impl;
 
-import cn.hutool.core.text.csv.CsvReader;
-import cn.hutool.core.text.csv.CsvUtil;
 import com.github.pagehelper.PageHelper;
-import com.wht.item.admin.controller.CmsPoetryController;
 import com.wht.item.admin.dao.CmsPoetryDao;
 import com.wht.item.admin.dto.CmsPoetryParam;
 import com.wht.item.admin.service.CmsPoetryService;
@@ -22,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.BufferedReader;
@@ -136,19 +132,29 @@ public class CmsPoetryServiceImpl implements CmsPoetryService {
 
     @Override
     public int uploadCsv(InputStream inputStream) {
-        BufferedReader BufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        CsvReader reader = CsvUtil.getReader();
         long a = System.currentTimeMillis();
-        List<CmsPoetryParam> result = reader.read(
-                BufferedReader, CmsPoetryParam.class);
-        List<List<CmsPoetryParam>> poetryList = ListUtils.partition(result, 3000);
-//        for (List<CmsPoetryParam> list : poetryList) {
-//            poetryDao.insertList(list);
-//        }
-        for (CmsPoetryParam poetry : result) {
-            createPoetry(poetry);
+        BufferedReader BufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        List<String> list = BufferedReader.lines().collect(Collectors.toList());
+        list.remove(0);
+        List<CmsPoetryParam> poetryList = new ArrayList<>();
+        for (String str :  list) {
+            String[] strList =  str.split(",");
+            if (strList[0].length() > 49) continue;
+            CmsPoetryParam poetryParam = new CmsPoetryParam();
+            poetryParam.setTitle(strList[0]);
+            poetryParam.setDynasty(strList[1]);
+            poetryParam.setAuthor(strList[2]);
+            poetryParam.setContent(strList[3]);
+            poetryList.add(poetryParam);
         }
-        return 0;
+
+        List<List<CmsPoetryParam>> result = ListUtils.partition(poetryList, 5000);
+        int count = 0;
+        for (List<CmsPoetryParam> CmsPoetryParamList : result) {
+            int num = poetryDao.insertList(CmsPoetryParamList);
+            count = count + num;
+        }
+        return count;
     }
 
     @Override

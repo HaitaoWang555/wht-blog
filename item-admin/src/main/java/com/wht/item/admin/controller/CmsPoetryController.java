@@ -140,17 +140,16 @@ public class CmsPoetryController {
     }
     @ApiOperation("批量上传")
     @PostMapping("/uploadCsv")
-    public CommonResult uploadDir(@RequestParam(required = false, value = "file") MultipartFile[] multipartFiles) throws IOException {
-        for (MultipartFile file : multipartFiles) {
-            String fileName = file.getOriginalFilename();
-            InputStream inputStream = file.getInputStream();
-            String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
+    public CommonResult uploadDir(@RequestParam(value = "file") MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        InputStream inputStream = file.getInputStream();
+        String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
 
-            if (suffix.equals("csv")) {
-                poetryService.uploadCsv(inputStream);
-            }
-
+        if (suffix.equals("csv")) {
+            int count = poetryService.uploadCsv(inputStream);
+            return CommonResult.success(null, "成功导入" + count + "条");
+        } else {
+            return CommonResult.failed("文件格式不符合");
         }
-        return CommonResult.failed();
     }
 }
