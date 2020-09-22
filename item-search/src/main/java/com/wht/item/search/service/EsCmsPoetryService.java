@@ -10,6 +10,10 @@ public interface EsCmsPoetryService {
      * 从数据库中导入所有商品到ES
      */
     int importAll();
+    /**
+     * 从数据库中导入所有商品到ES
+     */
+    int importList(List<EsCmsPoetry> esCmsPoetryList);
 
     /**
      * 根据id删除商品

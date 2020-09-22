@@ -31,6 +31,13 @@ public class EsCmsPoetryController {
         return CommonResult.success(count);
     }
 
+    @ApiOperation(value = "批量导入所有数据库中诗词到ES")
+    @PostMapping("/import")
+    public CommonResult<Integer> importList(@RequestParam("ids") List<EsCmsPoetry> esCmsPoetryList) {
+        int count = esPoetryService.importList(esCmsPoetryList);
+        return CommonResult.success(count);
+    }
+
     @ApiOperation(value = "根据id删除诗词")
     @PostMapping("/delete/{id}")
     public CommonResult<Object> delete(@PathVariable Long id) {

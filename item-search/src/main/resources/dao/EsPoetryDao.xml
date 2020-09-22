@@ -21,4 +21,9 @@
             WHERE p.id=#{id}
         </if>
     </select>
+    <select id="getEsPoetryList" resultMap="BaseResultMap">
+        select
+        id, title, dynasty, author, content
+        from cms_poetry
+    </select>
 </mapper>

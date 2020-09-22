@@ -1,5 +1,8 @@
 package com.wht.item.search.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.sun.xml.internal.bind.v2.TODO;
+import com.wht.item.model.CmsPoetryExample;
 import com.wht.item.search.dao.EsCmsPoetryDao;
 import com.wht.item.search.domain.EsCmsPoetry;
 import com.wht.item.search.repository.EsCmsPoetryRepository;
@@ -38,37 +41,18 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
 
     @Override
     public int importAll() {
+//        TODO: 批量查询
+//        PageHelper.startPage(1, 10000);
+//        List<EsCmsPoetry> esPoetryList = esPoetryDao.getEsPoetryList();
+//        System.out.println(esPoetryList.size());
+//        return 0;
         List<EsCmsPoetry> esPoetryList = esPoetryDao.getAllEsPoetryList(null);
-        int counter = 0;
-        try {
-            if (!elasticsearchTemplate.indexExists(PERSON_INDEX_NAME)) {
-                elasticsearchTemplate.createIndex(PERSON_INDEX_TYPE);
-            }
-            List<IndexQuery> queries = new ArrayList<>();
-            for (EsCmsPoetry esPoetry : esPoetryList) {
-                IndexQuery indexQuery = new IndexQuery();
-                indexQuery.setId(esPoetry.getId() + "");
-                indexQuery.setObject(esPoetry);
-                indexQuery.setIndexName(PERSON_INDEX_NAME);
-                indexQuery.setType(PERSON_INDEX_TYPE);
+        return insertList(esPoetryList);
+    }
 
-                queries.add(indexQuery);
-                if (counter % 500 == 0) {
-                    elasticsearchTemplate.bulkIndex(queries);
-                    queries.clear();
-                    System.out.println("bulkIndex counter : " + counter);
-                }
-                counter++;
-            }
-            if (queries.size() > 0) {
-                elasticsearchTemplate.bulkIndex(queries);
-            }
-            System.out.println("bulkIndex completed.");
-        } catch (Exception e) {
-            System.out.println("IndexerService.bulkIndex e;" + e.getMessage());
-            throw e;
-        }
-        return counter;
+    @Override
+    public int importList(List<EsCmsPoetry> esCmsPoetryList) {
+        return insertList(esCmsPoetryList);
     }
 
     @Override
@@ -124,5 +108,38 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
             LOGGER.info("title {}, dynasty {}, author {}, content {}", title, dynasty, author, content);
         }
         return esPoetryRepository.findByTitleAndDynastyAndAuthorAndContent(title, dynasty, author, content, pageable);
+    }
+
+    private int insertList(List<EsCmsPoetry> esPoetryList) {
+        int counter = 0;
+        try {
+            if (!elasticsearchTemplate.indexExists(PERSON_INDEX_NAME)) {
+                elasticsearchTemplate.createIndex(PERSON_INDEX_TYPE);
+            }
+            List<IndexQuery> queries = new ArrayList<>();
+            for (EsCmsPoetry esPoetry : esPoetryList) {
+                IndexQuery indexQuery = new IndexQuery();
+                indexQuery.setId(esPoetry.getId() + "");
+                indexQuery.setObject(esPoetry);
+                indexQuery.setIndexName(PERSON_INDEX_NAME);
+                indexQuery.setType(PERSON_INDEX_TYPE);
+
+                queries.add(indexQuery);
+                if (counter % 500 == 0) {
+                    elasticsearchTemplate.bulkIndex(queries);
+                    queries.clear();
+                    System.out.println("bulkIndex counter : " + counter);
+                }
+                counter++;
+            }
+            if (queries.size() > 0) {
+                elasticsearchTemplate.bulkIndex(queries);
+            }
+            System.out.println("bulkIndex completed.");
+        } catch (Exception e) {
+            System.out.println("IndexerService.bulkIndex e;" + e.getMessage());
+            throw e;
+        }
+        return counter;
     }
 }

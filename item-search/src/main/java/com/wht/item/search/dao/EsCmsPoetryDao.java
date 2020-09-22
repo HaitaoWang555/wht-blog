@@ -11,4 +11,5 @@ import java.util.List;
  */
 public interface EsCmsPoetryDao {
     List<EsCmsPoetry> getAllEsPoetryList(@Param("id") Long id);
+    List<EsCmsPoetry> getEsPoetryList();
 }
