@@ -1,8 +1,6 @@
 package com.wht.item.search.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.sun.xml.internal.bind.v2.TODO;
-import com.wht.item.model.CmsPoetryExample;
 import com.wht.item.search.dao.EsCmsPoetryDao;
 import com.wht.item.search.domain.EsCmsPoetry;
 import com.wht.item.search.repository.EsCmsPoetryRepository;
@@ -41,13 +39,15 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
 
     @Override
     public int importAll() {
-//        TODO: 批量查询
-//        PageHelper.startPage(1, 10000);
-//        List<EsCmsPoetry> esPoetryList = esPoetryDao.getEsPoetryList();
-//        System.out.println(esPoetryList.size());
-//        return 0;
-        List<EsCmsPoetry> esPoetryList = esPoetryDao.getAllEsPoetryList(null);
-        return insertList(esPoetryList);
+        int count = esPoetryDao.getCount();
+        int len = (int) Math.ceil(count / 10000d);
+        int insertCount = 0;
+        for (int i = 0; i < len; i++) {
+            PageHelper.startPage(i + 1, 10000, false);
+            List<EsCmsPoetry> esPoetryList = esPoetryDao.getEsPoetryList();
+            insertCount = insertCount + insertList(esPoetryList);
+        }
+        return insertCount;
     }
 
     @Override

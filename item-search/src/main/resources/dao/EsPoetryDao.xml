@@ -26,4 +26,7 @@
         id, title, dynasty, author, content
         from cms_poetry
     </select>
+    <select id="getCount"  resultType="java.lang.Integer">
+        select count(*) from cms_poetry
+    </select>
 </mapper>

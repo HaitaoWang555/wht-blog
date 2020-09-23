@@ -33,8 +33,8 @@ public class EsCmsPoetryController {
 
     @ApiOperation(value = "批量导入所有数据库中诗词到ES")
     @PostMapping("/import")
-    public CommonResult<Integer> importList(@RequestParam("ids") List<EsCmsPoetry> esCmsPoetryList) {
-        int count = esPoetryService.importList(esCmsPoetryList);
+    public CommonResult<Integer> importList(@RequestBody List<EsCmsPoetry> list) {
+        int count = esPoetryService.importList(list);
         return CommonResult.success(count);
     }
 
