@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 /**
  *  诗词搜索管理SService实现类
  * @author wht
@@ -51,8 +54,12 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
     }
 
     @Override
-    public int importList(List<EsCmsPoetry> esCmsPoetryList) {
-        return insertList(esCmsPoetryList);
+    public int updateList(Map<String, Integer> uriVariables) {
+        int id = uriVariables.get("id");
+        int num = uriVariables.get("num");
+        PageHelper.startPage(1, num, false);
+        List<EsCmsPoetry> esPoetryList = esPoetryDao.getEsPoetryList(id);
+        return insertList(esPoetryList);
     }
 
     @Override
@@ -99,14 +106,11 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
     @Override
     public Page<EsCmsPoetry> search(String title, String dynasty, String author, String content, Integer pageNum, Integer pageSize) {
         if (pageNum * pageSize > 10000) pageNum = 10000 / pageSize - 1;
-        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "id");
         if ("".equals(title)) title = null;
         if ("".equals(dynasty)) dynasty = null;
         if ("".equals(author)) author = null;
         if ("".equals(content)) content = null;
-        if (title != null || dynasty != null || author != null || content != null) {
-            LOGGER.info("title {}, dynasty {}, author {}, content {}", title, dynasty, author, content);
-        }
         return esPoetryRepository.findByTitleAndDynastyAndAuthorAndContent(title, dynasty, author, content, pageable);
     }
 
@@ -128,16 +132,16 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
                 if (counter % 500 == 0) {
                     elasticsearchTemplate.bulkIndex(queries);
                     queries.clear();
-                    System.out.println("bulkIndex counter : " + counter);
+                    LOGGER.info("bulkIndex counter : " + counter);
                 }
                 counter++;
             }
             if (queries.size() > 0) {
                 elasticsearchTemplate.bulkIndex(queries);
             }
-            System.out.println("bulkIndex completed.");
+            LOGGER.info("bulkIndex completed.");
         } catch (Exception e) {
-            System.out.println("IndexerService.bulkIndex e;" + e.getMessage());
+            LOGGER.error("IndexerService.bulkIndex e;" + e.getMessage());
             throw e;
         }
         return counter;

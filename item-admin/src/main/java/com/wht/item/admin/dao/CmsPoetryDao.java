@@ -12,4 +12,6 @@ import java.util.List;
  */
 public interface CmsPoetryDao {
     long insertSelective(CmsPoetry record);
-    int insertList(@Param("list") List<CmsPoetryParam> list);}
+    int insertList(@Param("list") List<CmsPoetryParam> list);
+    List<CmsPoetry> select();
+}

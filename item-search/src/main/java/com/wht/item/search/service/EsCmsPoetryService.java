@@ -4,6 +4,7 @@ import com.wht.item.search.domain.EsCmsPoetry;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 
 public interface EsCmsPoetryService {
     /**
@@ -11,9 +12,9 @@ public interface EsCmsPoetryService {
      */
     int importAll();
     /**
-     * 从数据库中导入所有商品到ES
+     * 更新数据到ES
      */
-    int importList(List<EsCmsPoetry> esCmsPoetryList);
+    int updateList(Map<String, Integer> uriVariables);
 
     /**
      * 根据id删除商品

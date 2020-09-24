@@ -1,6 +1,7 @@
 package com.wht.item.admin.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.wht.item.admin.async.TaskFactory;
 import com.wht.item.admin.dao.CmsPoetryDao;
 import com.wht.item.admin.dto.CmsPoetryParam;
 import com.wht.item.admin.service.CmsPoetryService;
@@ -39,6 +40,8 @@ public class CmsPoetryServiceImpl implements CmsPoetryService {
     private CmsPoetryDao poetryDao;
     @Resource
     private RestTemplate restTemplate;
+    @Resource
+    private TaskFactory task;
 
     private String HOST_ITEM_SEARCH = "http://localhost:8081/api/search";
 
@@ -85,7 +88,7 @@ public class CmsPoetryServiceImpl implements CmsPoetryService {
 
     @Override
     public List<CmsPoetry> listPoetry(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.startPage(pageNum, pageSize, "id desc");
         return poetryMapper.selectByExample(new CmsPoetryExample());
     }
 
@@ -132,7 +135,6 @@ public class CmsPoetryServiceImpl implements CmsPoetryService {
 
     @Override
     public int uploadCsv(InputStream inputStream) {
-        long a = System.currentTimeMillis();
         BufferedReader BufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         List<String> list = BufferedReader.lines().collect(Collectors.toList());
         list.remove(0);
@@ -150,8 +152,19 @@ public class CmsPoetryServiceImpl implements CmsPoetryService {
 
         List<List<CmsPoetryParam>> result = ListUtils.partition(poetryList, 5000);
         int count = 0;
+        PageHelper.startPage(1, 1, "id desc");
+        List<CmsPoetry> listPoetry = poetryDao.select();
+        Integer startId;
+        if (listPoetry.size() == 0) {
+            startId = 0;
+        } else {
+            startId = listPoetry.get(0).getId();
+        }
+
         for (List<CmsPoetryParam> CmsPoetryParamList : result) {
+            // TODO: 锁
             int num = poetryDao.insertList(CmsPoetryParamList);
+            task.importPoetryList(startId, num);
             count = count + num;
         }
         return count;

@@ -18,4 +18,6 @@ public interface EsCmsPoetryRepository extends ElasticsearchRepository<EsCmsPoet
     Page<EsCmsPoetry> findByTitleOrDynastyOrAuthorOrContent(String title, String dynasty, String author, String content, Pageable page);
 
     Page<EsCmsPoetry> findByTitleAndDynastyAndAuthorAndContent(String title, String dynasty, String author, String content, Pageable page);
+
+    Page<EsCmsPoetry> findAll(Pageable page);
 }

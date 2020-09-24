@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 诗词搜索管理
@@ -31,10 +32,10 @@ public class EsCmsPoetryController {
         return CommonResult.success(count);
     }
 
-    @ApiOperation(value = "批量导入所有数据库中诗词到ES")
-    @PostMapping("/import")
-    public CommonResult<Integer> importList(@RequestBody List<EsCmsPoetry> list) {
-        int count = esPoetryService.importList(list);
+    @ApiOperation(value = "更新数据到ES")
+    @PostMapping("/updateList")
+    public CommonResult<Integer> updateList(@RequestBody Map<String, Integer> uriVariables) {
+        int count = esPoetryService.updateList(uriVariables);
         return CommonResult.success(count);
     }
 

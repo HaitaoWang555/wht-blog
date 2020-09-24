@@ -55,4 +55,14 @@
             #{item.content,jdbcType=LONGVARCHAR})
         </foreach>
     </insert>
+
+    <select id="select" resultMap="BaseResultMap">
+        select
+        id, title, dynasty, author, content
+        from cms_poetry
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+
 </mapper>
