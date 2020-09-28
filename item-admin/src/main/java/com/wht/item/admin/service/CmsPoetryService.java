@@ -20,6 +20,8 @@ public interface CmsPoetryService {
      */
     int deletePoetry(List<Integer> ids);
 
+    int initPoetry(String path);
+
     List<CmsPoetry> listPoetry(int pageNum, int pageSize);
 
     List<CmsPoetryParam> downloadPoetry(String ids);

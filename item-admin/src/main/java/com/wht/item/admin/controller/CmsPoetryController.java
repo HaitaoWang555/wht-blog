@@ -125,6 +125,16 @@ public class CmsPoetryController {
         return CommonResult.failed();
     }
 
+    @ApiOperation(value = "初始化诗词数据库")
+    @PostMapping("/initPoetry")
+    public CommonResult delPoetry(@RequestParam("path") String path){
+        int count = poetryService.initPoetry(path);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
     @ApiOperation("导出数据")
     @GetMapping("/export")
     public void download(
@@ -140,16 +150,16 @@ public class CmsPoetryController {
     }
     @ApiOperation("批量上传")
     @PostMapping("/uploadCsv")
-    public CommonResult uploadDir(@RequestParam(value = "file") MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename();
-        InputStream inputStream = file.getInputStream();
-        String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
-
-        if (suffix.equals("csv")) {
-            int count = poetryService.uploadCsv(inputStream);
-            return CommonResult.success(null, "成功导入" + count + "条");
-        } else {
-            return CommonResult.failed("文件格式不符合");
+    public CommonResult uploadDir(@RequestParam(required =false, value = "file") MultipartFile[] multipartFiles) throws IOException {
+        int count = 0;
+        for (MultipartFile file : multipartFiles) {
+            String fileName = file.getOriginalFilename();
+            InputStream inputStream = file.getInputStream();
+            String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
+            if (suffix.equals("csv")) {
+                count = count + poetryService.uploadCsv(inputStream);
+            }
         }
+        return CommonResult.success(null, "成功导入" + count + "条");
     }
 }

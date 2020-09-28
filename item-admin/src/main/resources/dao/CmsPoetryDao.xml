@@ -58,7 +58,7 @@
 
     <select id="select" resultMap="BaseResultMap">
         select
-        id, title, dynasty, author, content
+        id
         from cms_poetry
         <if test="orderByClause != null">
             order by ${orderByClause}

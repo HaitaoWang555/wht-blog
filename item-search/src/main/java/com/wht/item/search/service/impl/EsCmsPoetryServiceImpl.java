@@ -69,6 +69,7 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
 
     @Override
     public EsCmsPoetry create(Long id) {
+        createIndex();
         EsCmsPoetry result = null;
         List<EsCmsPoetry> esPoetryList = esPoetryDao.getAllEsPoetryList(id);
         if (esPoetryList.size() > 0) {
@@ -80,6 +81,7 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
 
     @Override
     public EsCmsPoetry create(EsCmsPoetry esCmsPoetry) {
+        createIndex();
         return esPoetryRepository.save(esCmsPoetry);
     }
 
@@ -98,6 +100,9 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
 
     @Override
     public Page<EsCmsPoetry> search(String keyword, Integer pageNum, Integer pageSize) {
+        if (!noIndex()) {
+            return Page.empty();
+        }
         if (pageNum * pageSize > 10000) pageNum = 10000 / pageSize - 1;
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         return esPoetryRepository.findByTitleOrDynastyOrAuthorOrContent(keyword, keyword, keyword, keyword, pageable);
@@ -105,6 +110,9 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
 
     @Override
     public Page<EsCmsPoetry> search(String title, String dynasty, String author, String content, Integer pageNum, Integer pageSize) {
+        if (!noIndex()) {
+            return Page.empty();
+        }
         if (pageNum * pageSize > 10000) pageNum = 10000 / pageSize - 1;
         Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "id");
         if ("".equals(title)) title = null;
@@ -114,12 +122,18 @@ public class EsCmsPoetryServiceImpl implements EsCmsPoetryService {
         return esPoetryRepository.findByTitleAndDynastyAndAuthorAndContent(title, dynasty, author, content, pageable);
     }
 
+    private void createIndex () {
+        if (!elasticsearchTemplate.indexExists(PERSON_INDEX_NAME)) {
+            elasticsearchTemplate.createIndex(PERSON_INDEX_NAME);
+        }
+    }
+    private boolean noIndex () {
+        return elasticsearchTemplate.indexExists(PERSON_INDEX_NAME);
+    }
     private int insertList(List<EsCmsPoetry> esPoetryList) {
         int counter = 0;
         try {
-            if (!elasticsearchTemplate.indexExists(PERSON_INDEX_NAME)) {
-                elasticsearchTemplate.createIndex(PERSON_INDEX_TYPE);
-            }
+            createIndex();
             List<IndexQuery> queries = new ArrayList<>();
             for (EsCmsPoetry esPoetry : esPoetryList) {
                 IndexQuery indexQuery = new IndexQuery();
