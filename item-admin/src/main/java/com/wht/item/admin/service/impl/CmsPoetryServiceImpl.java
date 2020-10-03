@@ -1,7 +1,7 @@
 package com.wht.item.admin.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.wht.item.admin.controller.CmsPoetryController;
+import com.wht.item.admin.dao.CmsPoetryDao;
 import com.wht.item.admin.dto.CmsPoetryParam;
 import com.wht.item.admin.service.CmsPoetryService;
 import com.wht.item.common.api.CommonPage;
@@ -11,6 +11,7 @@ import com.wht.item.common.exception.ApiException;
 import com.wht.item.mapper.CmsPoetryMapper;
 import com.wht.item.model.CmsPoetry;
 import com.wht.item.model.CmsPoetryExample;
+import org.apache.commons.collections4.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -20,6 +21,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +33,8 @@ import java.util.stream.Collectors;
 public class CmsPoetryServiceImpl implements CmsPoetryService {
     @Resource
     private CmsPoetryMapper poetryMapper;
+    @Resource
+    private CmsPoetryDao poetryDao;
     @Resource
     private RestTemplate restTemplate;
 
@@ -77,8 +82,33 @@ public class CmsPoetryServiceImpl implements CmsPoetryService {
     }
 
     @Override
+    public int initPoetry(String path) {
+        int count = 0;
+        File file = new File(path);
+        if (file.exists()) {
+            File[] files = file.listFiles();
+            for (File csv : files) {
+                if (csv.isFile()) {
+                    String fileName = csv.getName();
+                    String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
+                    if (suffix.equals("csv")) {
+                        try {
+                            FileInputStream inputStream = new FileInputStream(csv);
+                            List<List<CmsPoetryParam>> result = csvToList(inputStream);
+                            count = count + insertPoetry(result);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+    @Override
     public List<CmsPoetry> listPoetry(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.startPage(pageNum, pageSize, "id desc");
         return poetryMapper.selectByExample(new CmsPoetryExample());
     }
 
@@ -121,6 +151,29 @@ public class CmsPoetryServiceImpl implements CmsPoetryService {
     @Override
     public CmsPoetry getPoetry(int id) {
         return poetryMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public int uploadCsv(InputStream inputStream) {
+
+        List<List<CmsPoetryParam>> result = csvToList(inputStream);
+
+        int count = 0;
+
+        for (List<CmsPoetryParam> CmsPoetryParamList : result) {
+            PageHelper.startPage(1, 1, "id desc");
+            List<CmsPoetry> listPoetry = poetryDao.select();
+            Integer startId;
+            if (listPoetry.size() == 0) {
+                startId = 0;
+            } else {
+                startId = listPoetry.get(0).getId();
+            }
+            int num = poetryDao.insertList(CmsPoetryParamList);
+            importPoetryList(startId, num);
+            count = count + num;
+        }
+        return count;
     }
 
     @Override
@@ -212,4 +265,53 @@ public class CmsPoetryServiceImpl implements CmsPoetryService {
             LOGGER.error("esDel {},  ERROR: {}", ids, e.getMessage());
         }
     }
+    /**
+     * ES 更新诗词
+     */
+    private void importPoetryList(Integer id, Integer insertNum) {
+        String url = HOST_ITEM_SEARCH + "/esPoetry/updateList";
+        Map<String, Integer> uriVariables = new HashMap<>();
+        uriVariables.put("id", id);
+        uriVariables.put("num", insertNum);
+        try {
+            restTemplate.postForEntity(url, uriVariables, CommonResult.class);
+        } catch (Exception e) {
+            LOGGER.error("esCreate {},  ERROR: {}", "importList", e.getMessage());
+        }
+    }
+
+    /**
+     * 将 csv 转为List
+     */
+    private List<List<CmsPoetryParam>> csvToList(InputStream inputStream) {
+        BufferedReader BufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        List<String> list = BufferedReader.lines().collect(Collectors.toList());
+        list.remove(0);
+        List<CmsPoetryParam> poetryList = new ArrayList<>();
+        for (String str :  list) {
+            String[] strList =  str.split("\"");
+            if (strList[1].length() > 49) continue;
+            CmsPoetryParam poetryParam = new CmsPoetryParam();
+            poetryParam.setTitle(strList[1]);
+            poetryParam.setDynasty(strList[3]);
+            poetryParam.setAuthor(strList[5]);
+            poetryParam.setContent(strList[7]);
+            poetryList.add(poetryParam);
+        }
+
+        return ListUtils.partition(poetryList, 5000);
+    }
+
+    /**
+     *  插入数据库
+     */
+    private int insertPoetry(List<List<CmsPoetryParam>> result) {
+        int count = 0;
+        for (List<CmsPoetryParam> CmsPoetryParamList : result) {
+            int num = poetryDao.insertList(CmsPoetryParamList);
+            count = count + num;
+        }
+        return count;
+    }
+
 }

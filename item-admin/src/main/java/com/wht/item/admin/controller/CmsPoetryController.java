@@ -10,20 +10,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -32,7 +29,6 @@ import java.util.Objects;
  * @author wht
  * @since 2020-05-30 19:36
  */
-
 @Api(tags = "诗词管理接口")
 @RequestMapping(value = "/poetry")
 @RestController
@@ -129,6 +125,16 @@ public class CmsPoetryController {
         return CommonResult.failed();
     }
 
+    @ApiOperation(value = "初始化诗词数据库")
+    @PostMapping("/initPoetry")
+    public CommonResult delPoetry(@RequestParam("path") String path){
+        int count = poetryService.initPoetry(path);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
     @ApiOperation("导出数据")
     @GetMapping("/export")
     public void download(
@@ -142,5 +148,18 @@ public class CmsPoetryController {
         response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
         EasyExcel.write(response.getOutputStream(), CmsPoetryParam.class).sheet("诗词").doWrite(poetryService.downloadPoetry(ids));
     }
-
+    @ApiOperation("批量上传")
+    @PostMapping("/uploadCsv")
+    public CommonResult uploadDir(@RequestParam(required =false, value = "file") MultipartFile[] multipartFiles) throws IOException {
+        int count = 0;
+        for (MultipartFile file : multipartFiles) {
+            String fileName = file.getOriginalFilename();
+            InputStream inputStream = file.getInputStream();
+            String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
+            if (suffix.equals("csv")) {
+                count = count + poetryService.uploadCsv(inputStream);
+            }
+        }
+        return CommonResult.success(null, "成功导入" + count + "条");
+    }
 }

@@ -44,4 +44,25 @@
             </if>
         </trim>
     </insert>
+
+    <!--批量新增 -->
+    <insert id="insertList">
+        insert into cms_poetry (title, dynasty, author, content) VALUES
+        <foreach collection="list" separator="," item="item" index="index">
+            (#{item.title,jdbcType=VARCHAR},
+            #{item.dynasty,jdbcType=VARCHAR},
+            #{item.author,jdbcType=VARCHAR},
+            #{item.content,jdbcType=LONGVARCHAR})
+        </foreach>
+    </insert>
+
+    <select id="select" resultMap="BaseResultMap">
+        select
+        id
+        from cms_poetry
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+
 </mapper>

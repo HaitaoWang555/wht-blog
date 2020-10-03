@@ -21,4 +21,15 @@
             WHERE p.id=#{id}
         </if>
     </select>
+    <select id="getEsPoetryList" resultMap="BaseResultMap">
+        select
+        id, title, dynasty, author, content
+        from cms_poetry
+        <if test="id!=null">
+            WHERE id>#{id}
+        </if>
+    </select>
+    <select id="getCount"  resultType="java.lang.Integer">
+        select count(*) from cms_poetry
+    </select>
 </mapper>

@@ -1,6 +1,10 @@
 package com.wht.item.admin.dao;
 
+import com.wht.item.admin.dto.CmsPoetryParam;
 import com.wht.item.model.CmsPoetry;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author wht
@@ -8,4 +12,6 @@ import com.wht.item.model.CmsPoetry;
  */
 public interface CmsPoetryDao {
     long insertSelective(CmsPoetry record);
+    int insertList(@Param("list") List<CmsPoetryParam> list);
+    List<CmsPoetry> select();
 }

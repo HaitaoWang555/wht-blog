@@ -124,7 +124,7 @@ DROP TABLE IF EXISTS `cms_poetry`;
 CREATE TABLE `cms_poetry` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '诗词名称',
-  `dynasty` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '朝代',
+  `dynasty` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '朝代',
   `author` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '作者',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin COMMENT '内容',
   PRIMARY KEY (`id`)

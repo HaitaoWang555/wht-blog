@@ -10,5 +10,8 @@ import java.util.List;
  * @since 2020-04-29 19:11
  */
 public interface EsCmsPoetryDao {
-    List<EsCmsPoetry> getAllEsPoetryList(@Param("id") Long id);
+    List<EsCmsPoetry> getAllEsPoetryList(@Param("id") long id);
+    List<EsCmsPoetry> getEsPoetryList(@Param("id") Integer id);
+    List<EsCmsPoetry> getEsPoetryList();
+    int getCount();
 }
