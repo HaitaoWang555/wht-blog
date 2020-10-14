@@ -25,6 +25,7 @@ public class ArchiveServiceImpl implements ArchiveService {
     public List<CmsArticle> getAll() {
         CmsArticleExample example = new CmsArticleExample();
         example.createCriteria().andStatusEqualTo("publish");
+        example.setOrderByClause("updated_content_time desc");
         return cmsArticleMapper.selectByExample(example);
     }
 
