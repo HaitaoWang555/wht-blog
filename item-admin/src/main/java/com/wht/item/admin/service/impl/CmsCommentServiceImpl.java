@@ -79,6 +79,7 @@ public class CmsCommentServiceImpl implements CmsCommentService {
         CmsCommentExample.Criteria criteria = example.createCriteria();
         criteria.andArticleIdIn(aids);
         List<CmsComment> commentList = commentMapper.selectByExample(example);
+        if (commentList.size() == 0) return 0;
         List<Long> ids = commentList.stream().map(CmsComment::getId).collect(Collectors.toList());
         return deleteComment(ids);
     }
